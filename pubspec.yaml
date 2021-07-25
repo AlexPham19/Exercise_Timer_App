@@ -1,0 +1,36 @@
+name: my_first_flutter_app
+description: A new Flutter project.
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sqflite: ^2.0.0
+  flutter_svg: ^0.22.0
+  cupertino_icons: ^1.0.2
+  flutter_material_pickers: ^3.1.0
+  path_provider: ^2.0.2
+  http: ^0.13.3
+  hive: ^2.0.4
+  hive_flutter: ^1.0.0
+  intl: ^0.17.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  hive_generator: ^1.1.0
+  build_runner: ^2.0.4
+
+flutter:
+  assets:
+    - assets/fonts/
+    - assets/img/
+    - assets/icon/
+    - assets/data/
+  uses-material-design: true
