@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_material_pickers/helpers/show_scroll_picker.dart';
+import 'package:flutter_material_pickers/helpers/show_number_picker.dart';
+import 'package:flutter_material_pickers/helpers/show_radio_picker.dart';
 import 'package:my_first_flutter_app/model/exerciseData.dart';
 import 'package:my_first_flutter_app/model/exerciseDetails.dart';
 
@@ -83,8 +82,7 @@ class _CustomExerciseState extends State<CustomExercise> {
                   if (snapshot.hasError) print(snapshot.error);
                   if (snapshot.hasData) {
                     for (int i = 0; i < snapshot.data!.length; i++) {
-                      if (snapshot.data![i].name != null)
-                        names.add(snapshot.data![i].name);
+                      names.add(snapshot.data![i].name);
                     }
                   }
                   return Container();
@@ -96,7 +94,7 @@ class _CustomExerciseState extends State<CustomExercise> {
                   Flexible(
                     child: InkWell(
                       onTap: () {
-                        showMaterialScrollPicker<String>(
+                        showMaterialRadioPicker<String>(
                           context: context,
                           title: 'Pick Your Exercise',
                           items: names,
@@ -108,8 +106,15 @@ class _CustomExerciseState extends State<CustomExercise> {
                         );
                       },
                       child: TextField(
+                        textAlign: TextAlign.center,
                         enabled: false,
                         controller: controllerName,
+                        decoration: InputDecoration(
+                          disabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.blue, width: 2.0),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -120,22 +125,66 @@ class _CustomExerciseState extends State<CustomExercise> {
                   Text('Choose exercise duration for set $indexExercise: '),
                   Flexible(
                     child: Container(
-                      width: 30,
-                      height: 30,
-                      child: TextField(
-                        controller: controllerExerciseMinutes,
-                        keyboardType: TextInputType.number,
+                      // width: 30,
+                      // height: 30,
+                      child: InkWell(
+                        onTap: () {
+                          showMaterialNumberPicker(
+                              title: 'Minutes',
+                              context: context,
+                              minNumber: 0,
+                              maxNumber: 59,
+                              onChanged: (value) => setState(() {
+                                    controllerExerciseMinutes.text =
+                                        value.toString().padLeft(2, '0');
+                                  }));
+                        },
+                        child: TextField(
+                          enabled: false,
+                          textAlign: TextAlign.center,
+                          controller: controllerExerciseMinutes,
+                          keyboardType: TextInputType.number,
+                          maxLength: 2,
+                          decoration: InputDecoration(
+                            disabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 2.0),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  Text(':'),
+                  //Text(':'),
                   Flexible(
                     child: Container(
-                      width: 30,
-                      height: 30,
-                      child: TextField(
-                        controller: controllerExerciseSeconds,
-                        keyboardType: TextInputType.number,
+                      // width: 30,
+                      // height: 30,
+                      child: InkWell(
+                        onTap: () {
+                          showMaterialNumberPicker(
+                              title: 'Seconds',
+                              context: context,
+                              minNumber: 0,
+                              maxNumber: 59,
+                              onChanged: (value) => setState(() {
+                                    controllerExerciseSeconds.text =
+                                        value.toString().padLeft(2, '0');
+                                  }));
+                        },
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          enabled: false,
+                          controller: controllerExerciseSeconds,
+                          keyboardType: TextInputType.number,
+                          maxLength: 2,
+                          decoration: InputDecoration(
+                            disabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 2.0),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   )
@@ -146,22 +195,66 @@ class _CustomExerciseState extends State<CustomExercise> {
                   Text('Choose rest duration for set $indexExercise: '),
                   Flexible(
                     child: Container(
-                      width: 30,
-                      height: 30,
-                      child: TextField(
-                        controller: controllerRestMinutes,
-                        keyboardType: TextInputType.number,
+                      // width: 30,
+                      // height: 30,
+                      child: InkWell(
+                        onTap: () {
+                          showMaterialNumberPicker(
+                              title: 'Minutes',
+                              context: context,
+                              minNumber: 0,
+                              maxNumber: 59,
+                              onChanged: (value) => setState(() {
+                                    controllerRestMinutes.text =
+                                        value.toString().padLeft(2, '0');
+                                  }));
+                        },
+                        child: TextField(
+                          enabled: false,
+                          textAlign: TextAlign.center,
+                          controller: controllerRestMinutes,
+                          keyboardType: TextInputType.number,
+                          maxLength: 2,
+                          decoration: InputDecoration(
+                            disabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 2.0),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  Text(':'),
+                  //Text(':'),
                   Flexible(
                     child: Container(
-                      width: 30,
-                      height: 30,
-                      child: TextField(
-                        controller: controllerRestSeconds,
-                        keyboardType: TextInputType.number,
+                      // width: 30,
+                      // height: 30,
+                      child: InkWell(
+                        onTap: () {
+                          showMaterialNumberPicker(
+                              title: 'Seconds',
+                              context: context,
+                              minNumber: 0,
+                              maxNumber: 59,
+                              onChanged: (value) => setState(() {
+                                    controllerRestSeconds.text =
+                                        value.toString().padLeft(2, '0');
+                                  }));
+                        },
+                        child: TextField(
+                          enabled: false,
+                          textAlign: TextAlign.center,
+                          controller: controllerRestSeconds,
+                          keyboardType: TextInputType.number,
+                          maxLength: 2,
+                          decoration: InputDecoration(
+                            disabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 2.0),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   )
@@ -177,7 +270,6 @@ class _CustomExerciseState extends State<CustomExercise> {
                         print(controllerExerciseSeconds.text.toString());
                         addToList();
                       });
-
                     }
                     if (indexExercise >= int.parse(numberExercises) ||
                         isDefaultButtonOn == true) {
