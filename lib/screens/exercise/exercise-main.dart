@@ -1,10 +1,9 @@
-import 'dart:async';
 import 'dart:ui';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/model/savedData.dart';
 import 'package:my_first_flutter_app/screens/welcome/welcome.dart';
 
@@ -28,6 +27,8 @@ int counterMinutes = 0, counterSeconds = 10; // low = number, up = string
 String CounterMinutes = '00', CounterSeconds = '10';
 String currentState = 'Ready';
 List<Color> TimerColors = [];
+List<LinearGradient> ThemeGradients = [];
+List<Color> BorderColors = [];
 
 class _ExerciseMainState extends State<ExerciseMain>
     with TickerProviderStateMixin {
@@ -55,22 +56,59 @@ class _ExerciseMainState extends State<ExerciseMain>
     controller = AnimationController(
         vsync: this,
         duration: Duration(seconds: counterSeconds + counterMinutes * 60));
-
     States.add('Ready');
     Time.add(10);
     TimerColors.add(Color.fromRGBO(252, 182, 8, 1.0));
+    BorderColors.add(Themes.readyTimerBorder);
+    ThemeGradients.add(
+      LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: <Color>[Themes.readyThemeStart, Themes.readyThemeEnd],
+        tileMode: TileMode.repeated, // repeats the gradient over the canvas
+      ),
+    );
     for (int i = 1; i <= numberOfRepetitions; i++) {
       for (int j = 1; j <= numberOfExercises; j++) {
         States.add('Exercise');
         TimerColors.add(Colors.green);
+        BorderColors.add(Themes.exerciseTimerBorder);
+        ThemeGradients.add(
+          LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[Themes.exerciseThemeStart, Themes.exerciseThemeEnd],
+            tileMode: TileMode.repeated, // repeats the gradient over the canvas
+          ),
+        );
         Time.add(minutesExercise * 60 + secondsExercise);
         if (j == numberOfExercises && numberOfRepetitions > 1) {
           States.add('Time to change Rep');
-          TimerColors.add(Colors.blue);
+          TimerColors.add(Colors.yellow);
+          BorderColors.add(Themes.readyTimerBorder);
+          ThemeGradients.add(
+            LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[Themes.readyThemeStart, Themes.readyThemeEnd],
+              tileMode:
+                  TileMode.repeated, // repeats the gradient over the canvas
+            ),
+          );
           Time.add(minutesToRepeat * 60 + secondsToRepeat);
         } else if (j == numberOfExercises && numberOfRepetitions == 1) {
         } else {
           TimerColors.add(Colors.redAccent);
+          BorderColors.add(Themes.restTimerBorder);
+          ThemeGradients.add(
+            LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[Themes.restThemeStart, Themes.restThemeEnd],
+              tileMode:
+                  TileMode.repeated, // repeats the gradient over the canvas
+            ),
+          );
           States.add('Rest');
           Time.add(minutesRest * 60 + secondsRest);
         }
@@ -94,6 +132,7 @@ class _ExerciseMainState extends State<ExerciseMain>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: TimerColors[index],
         title: Text('Exercise Now'),
         centerTitle: true,
       ),
@@ -104,7 +143,10 @@ class _ExerciseMainState extends State<ExerciseMain>
         },
         child: SafeArea(
           child: Container(
-            color: TimerColors[index],
+            decoration: BoxDecoration(
+              gradient: ThemeGradients[index],
+            ),
+            //color: TimerColors[index],
             child: Column(
               children: [
                 Container(
@@ -123,8 +165,7 @@ class _ExerciseMainState extends State<ExerciseMain>
                                 return new CustomPaint(
                                   painter: TimerPainter(
                                     animation: controller!,
-                                    backgroundColor:
-                                        Color.fromRGBO(194, 192, 192, 1),
+                                    backgroundColor: BorderColors[index],
                                     color: Colors.white,
                                   ),
                                 );
@@ -224,7 +265,7 @@ class _ExerciseMainState extends State<ExerciseMain>
                           first = true;
                           if (index == States.length) dispose();
                           if (controller!.isAnimating)
-                            controller!.stop();
+                            controller!.stop(canceled: true);
                           else {
                             controller!.reverse(
                                 from: controller!.value == 0.0
@@ -264,8 +305,7 @@ class _ExerciseMainState extends State<ExerciseMain>
   void action() {
     if (mounted) {
       setState(() {
-        if(index < States.length - 1)
-        index += 1;
+        if (index < States.length - 1) index += 1;
         counterMinutes = Time[index] ~/ 60;
         counterSeconds = Time[index] % 60;
         CounterMinutes = counterMinutes.toString();
@@ -309,23 +349,23 @@ class _ExerciseMainState extends State<ExerciseMain>
 }
 
 class TimerPainter extends CustomPainter {
-  final Animation animation;
+  final Animation<double> animation;
   final Color color, backgroundColor;
 
   TimerPainter({
     required this.animation,
     required this.backgroundColor,
     required this.color,
-  });
+  }) : super(repaint: animation);
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
       ..color = backgroundColor
-      ..strokeWidth = 20.0
+      ..strokeWidth = 9.0
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;
-    canvas.drawCircle(size.center(Offset.zero), size.width / 2, paint);
+    canvas.drawCircle(size.center(Offset.zero), size.width / 2.0, paint);
     paint.color = color;
     double progress = (1 - animation.value) * 2 * pi;
     canvas.drawArc(Offset.zero & size, pi * 1.5, -progress, false, paint);

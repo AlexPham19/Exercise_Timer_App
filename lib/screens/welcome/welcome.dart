@@ -1,14 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
-import 'package:my_first_flutter_app/screens/exercise/exercise-main.dart';
 import 'package:my_first_flutter_app/widgets/drawer.dart';
 import 'package:my_first_flutter_app/widgets/main-app-bar-with-drawer.dart';
-
-import '../history.dart';
-import '../promotions.dart';
-import '../settings.dart';
-import '../statistics.dart';
 
 String MinutesTotal = '',
     SecondsTotal = '',
@@ -20,8 +14,8 @@ String MinutesTotal = '',
     NumberOfRepetitions = '',
     MinutesToRepeat = '',
     SecondsToRepeat = '';
-class WelcomePage extends StatefulWidget {
 
+class WelcomePage extends StatefulWidget {
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
@@ -56,14 +50,26 @@ class _WelcomePageState extends State<WelcomePage> {
       drawer: MaterialDrawer(currentRoute: '/welcome'),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
-        child: MainAppBar(title: 'Stopwatch', scaffoldKey: _scaffoldKey,),
+        child: MainAppBar(
+          title: 'Stopwatch',
+          scaffoldKey: _scaffoldKey,
+        ),
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: ListView(
           children: <Widget>[
             Container(
-              color: Themes.appBarTheme,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[Color(0xffFA5853), Color(0xffF42E52)],
+                  tileMode:
+                      TileMode.repeated, // repeats the gradient over the canvas
+                ),
+              ),
+             // color: Themes.appBarTheme,
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Align(
                 alignment: Alignment.center,
@@ -99,10 +105,11 @@ class _WelcomePageState extends State<WelcomePage> {
                   Container(
                     padding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: ItemSetTime(
+                    child: itemSetTime(
                         Icons.play_circle_outline,
-                        Colors.lightGreen,
-                        Colors.green,
+                        Themes.exerciseThemeMain,
+                        Themes.exerciseIconMain,
+                        Themes.exerciseDialogTheme,
                         'Exercise',
                         MinutesExercise + ':' + SecondsExercise,
                         MinutesExercise,
@@ -111,10 +118,11 @@ class _WelcomePageState extends State<WelcomePage> {
                   Container(
                     padding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: ItemSetTime(
+                    child: itemSetTime(
                         Icons.pause_circle_outline,
-                        Color.fromRGBO(241, 157, 157, 1),
-                        Colors.red,
+                        Themes.restThemeMain,
+                        Themes.restIconMain,
+                        Themes.restDialogTheme,
                         'Rest',
                         MinutesRest + ':' + SecondsRest,
                         MinutesRest,
@@ -123,10 +131,11 @@ class _WelcomePageState extends State<WelcomePage> {
                   Container(
                     padding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: ItemSetReps(
+                    child: itemSetReps(
                       Icons.play_circle_outline,
-                      Color.fromRGBO(213, 213, 213, 1),
-                      Colors.grey,
+                      Themes.numberExerciseThemeMain,
+                      Themes.numberExerciseIconMain,
+                      Themes.numberExerciseDialogTheme,
                       'Exercises',
                       NumberOfExercises,
                     ),
@@ -134,10 +143,11 @@ class _WelcomePageState extends State<WelcomePage> {
                   Container(
                     padding:
                         EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: ItemSetReps(
+                    child: itemSetReps(
                       Icons.play_circle_outline,
-                      Color.fromRGBO(177, 229, 245, 1.0),
-                      Colors.blue,
+                      Themes.numberRepetitionsThemeMain,
+                      Themes.numberRepetitionsIconMain,
+                      Themes.numberRepetitionsDialogTheme,
                       'Repetitions',
                       NumberOfRepetitions,
                     ),
@@ -146,10 +156,11 @@ class _WelcomePageState extends State<WelcomePage> {
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                      child: ItemSetTime(
+                      child: itemSetTime(
                           Icons.play_circle_outline,
-                          Color.fromRGBO(252, 252, 189, 1),
-                          Colors.yellow,
+                          Themes.timeToChangeRepThemeMain,
+                          Themes.timeToChangeRepIconMain,
+                          Themes.timeToChangeRepDialogTheme,
                           'Time to repeat',
                           MinutesToRepeat + ':' + SecondsToRepeat,
                           MinutesToRepeat,
@@ -165,19 +176,19 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Widget ItemSetTime(IconData icon, Color color, Color iconColor, String title,
-      String time, String Min, String Sec) {
+  Widget itemSetTime(IconData icon, Color color, Color iconColor, Color dialogThemeColor, String title,
+      String time, String minutes, String seconds) {
     return InkWell(
       onTap: () {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             TextEditingController _editingControllerMinutes =
-                new TextEditingController(text: Min);
+                new TextEditingController(text: minutes);
             TextEditingController _editingControllerSeconds =
-                new TextEditingController(text: Sec);
+                new TextEditingController(text: seconds);
             return AlertDialog(
-              backgroundColor: color,
+              backgroundColor: dialogThemeColor,
               actions: [
                 Center(
                   child: ElevatedButton(
@@ -203,7 +214,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               SecondsToRepeat = sec;
                               break;
                             default:
-                              ;
+                              {}
                           }
                           int minEx = int.parse(MinutesExercise);
                           int secEx = int.parse(SecondsExercise);
@@ -217,7 +228,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   (minRest * 60 + secRest) * (numEx - 1)) *
                               (numRep);
                           if (numRep > 1) secTotal += (minRep * 60 + secRep);
-                          int minTotal = ((secTotal as int) ~/ 60) as int;
+                          int minTotal = secTotal ~/ 60;
                           secTotal = secTotal % 60;
                           MinutesTotal = minTotal.toString();
                           SecondsTotal = secTotal.toString();
@@ -375,17 +386,17 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Widget ItemSetReps(
-      IconData icon, Color color, Color iconColor, String title, String Rep) {
+  Widget itemSetReps(IconData icon, Color color, Color iconColor, Color dialogThemeColor, String title,
+      String repetitions) {
     return InkWell(
       onTap: () {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             TextEditingController _editingControllerReps =
-                new TextEditingController(text: Rep);
+                new TextEditingController(text: repetitions);
             return AlertDialog(
-              backgroundColor: color,
+              backgroundColor: dialogThemeColor,
               actions: [
                 Center(
                   child: ElevatedButton(
@@ -401,7 +412,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               NumberOfExercises = rep;
                               break;
                             default:
-                              ;
+                              {}
                           }
                           int minEx = int.parse(MinutesExercise);
                           int secEx = int.parse(SecondsExercise);
@@ -415,7 +426,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   (minRest * 60 + secRest) * (numEx - 1)) *
                               (numRep);
                           if (numRep > 1) secTotal += (minRep * 60 + secRep);
-                          int minTotal = ((secTotal as int) ~/ 60) as int;
+                          int minTotal = secTotal ~/ 60;
                           secTotal = secTotal % 60;
                           MinutesTotal = minTotal.toString();
                           SecondsTotal = secTotal.toString();
@@ -528,7 +539,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 ],
               ),
               Text(
-                Rep,
+                repetitions,
                 style: TextStyle(
                   color: iconColor,
                   fontSize: 23,

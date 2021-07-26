@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/model/exerciseData.dart';
 import 'package:my_first_flutter_app/model/savedData.dart';
 import 'package:my_first_flutter_app/screens/custom-exercise/custom-exercise.dart';
@@ -20,6 +21,8 @@ String CounterMinutes = '00', CounterSeconds = '10';
 String currentState = 'Ready';
 List<Color> TimerColors = [];
 List<ExerciseData> listData = [];
+List<LinearGradient> ThemeGradients = [];
+List<Color> BorderColors = [];
 
 class _CustomExerciseActionState extends State<CustomExerciseAction>
     with TickerProviderStateMixin {
@@ -44,19 +47,57 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
     States.add('Ready');
     Time.add(10);
     TimerColors.add(Color.fromRGBO(252, 182, 8, 1.0));
+    BorderColors.add(Themes.readyTimerBorder);
+    ThemeGradients.add(
+      LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: <Color>[Themes.readyThemeStart, Themes.readyThemeEnd],
+        tileMode: TileMode.repeated, // repeats the gradient over the canvas
+      ),
+    );
     for (int i = 1; i <= repetitions; i++) {
       for (int j = 1; j <= exercises; j++) {
         States.add(listCustomExercise[j - 1].name);
         TimerColors.add(Colors.green);
+        BorderColors.add(Themes.exerciseTimerBorder);
+        ThemeGradients.add(
+          LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: <Color>[Themes.exerciseThemeStart, Themes.exerciseThemeEnd],
+            tileMode: TileMode.repeated, // repeats the gradient over the canvas
+          ),
+        );
         Time.add(listCustomExercise[j - 1].secondExercise);
         if (j == exercises && repetitions > 1) {
           print(repetitions);
           States.add('Time to change Rep');
-          TimerColors.add(Colors.blue);
+          TimerColors.add(Colors.yellow);
+          BorderColors.add(Themes.readyTimerBorder);
+          ThemeGradients.add(
+            LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[Themes.readyThemeStart, Themes.readyThemeEnd],
+              tileMode:
+              TileMode.repeated, // repeats the gradient over the canvas
+            ),
+          );
           Time.add(timeToChangeRep);
         } else if (j == exercises && repetitions == 1) {
         } else {
           TimerColors.add(Colors.redAccent);
+          BorderColors.add(Themes.restTimerBorder);
+          ThemeGradients.add(
+            LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: <Color>[Themes.restThemeStart, Themes.restThemeEnd],
+              tileMode:
+              TileMode.repeated, // repeats the gradient over the canvas
+            ),
+          );
           States.add('Rest');
           Time.add(listCustomExercise[j - 1].secondRest);
         }
@@ -94,6 +135,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: TimerColors[index],
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -105,7 +147,6 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
           style: TextStyle(fontSize: 23),
         ),
         centerTitle: true,
-        backgroundColor: Colors.redAccent,
       ),
       backgroundColor: Colors.white,
       body: WillPopScope(
@@ -115,7 +156,9 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
         },
         child: SafeArea(
           child: Container(
-            color: TimerColors[index],
+            decoration: BoxDecoration(
+              gradient: ThemeGradients[index],
+            ),
             child: Column(
               children: [
                 Container(
@@ -256,7 +299,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                         controller!.reverse(from: 1.0);
                       });
                     },
-                    child: Text('Thêm 15 giây nghỉ'),
+                    child: Text('Thêm 15 giây nghỉ', style: TextStyle(color: Colors.white),),
                   ),
                 )
               ],
