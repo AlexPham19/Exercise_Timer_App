@@ -2,7 +2,7 @@ import 'dart:ui' show Color;
 import 'package:flutter/material.dart';
 
 class Themes {
-  static const Color appBarTheme = Colors.redAccent;
+  static const Color appBarTheme = Color.fromRGBO(246, 48, 83, 1);
   static const Color background = Colors.white;
 
   //------ THEME FOR WELCOME PAGES -----//

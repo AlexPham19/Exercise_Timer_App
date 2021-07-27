@@ -9,6 +9,7 @@ import 'package:my_first_flutter_app/screens/history.dart';
 import 'package:my_first_flutter_app/screens/promotions.dart';
 import 'package:my_first_flutter_app/screens/settings.dart';
 import 'package:my_first_flutter_app/screens/statistics.dart';
+import 'package:my_first_flutter_app/screens/try-premium.dart';
 import 'package:my_first_flutter_app/screens/welcome/welcome.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -44,6 +45,7 @@ class myApp extends StatelessWidget {
         "/promotions": (BuildContext context) => new Promotions(),
         "/exercise-main": (BuildContext context) => new ExerciseMain(),
         "/congratulation-page": (BuildContext context) => new CongratulationPage(),
+        "/try-premium": (BuildContext context) => new TryPremium(),
       },
     );
   }
