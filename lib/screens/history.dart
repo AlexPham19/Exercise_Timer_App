@@ -7,6 +7,7 @@ import 'package:my_first_flutter_app/widgets/drawer.dart';
 import 'package:my_first_flutter_app/widgets/main-app-bar-with-drawer.dart';
 
 class History extends StatefulWidget {
+  static const id = '/history';
   @override
   _HistoryState createState() => _HistoryState();
 }

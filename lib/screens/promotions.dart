@@ -154,7 +154,12 @@ class _PromotionsState extends State<Promotions> {
                   color: Themes.appBarTheme,
                 ),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(SnackBar(
+                          content: Text('Tin người vcl')));
+                  },
                   child: Center(
                       child: Text(
                     'MỞ KHÓA MIỄN PHÍ',

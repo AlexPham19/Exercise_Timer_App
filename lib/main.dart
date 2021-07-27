@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:my_first_flutter_app/screens/custom-exercise/custom-exercise-action.dart';
 import 'package:my_first_flutter_app/screens/custom-exercise/custom-exercise.dart';
@@ -20,9 +21,12 @@ Future<void> main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(SavedDataAdapter());
-  Hive.openBox('savedData');
-  runApp(myApp());
+  await Hive.openBox('savedData');
 
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(myApp());
+  });
 }
 
 class myApp extends StatelessWidget {

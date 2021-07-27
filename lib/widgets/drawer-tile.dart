@@ -10,16 +10,29 @@ class DrawerTile extends StatelessWidget {
   final String route;
   final String currentRoute;
 
-  DrawerTile({required this.title, required this.icon, required this.route, required this.currentRoute});
+  DrawerTile(
+      {required this.title,
+      required this.icon,
+      required this.route,
+      required this.currentRoute});
 
   @override
   Widget build(BuildContext context) {
-    Color customColor = (route == currentRoute)? Color.fromRGBO(253, 200, 200, 1) : Colors.white;
-    Color customColorIcon = (route == currentRoute)? Themes.appBarTheme : Colors.grey;
-    Color customColorTitle = (route == currentRoute)? Themes.appBarTheme : Colors.black;
+    Color customColor = (route == currentRoute)
+        ? Color.fromRGBO(253, 200, 200, 1)
+        : Colors.white;
+    Color customColorIcon =
+        (route == currentRoute) ? Themes.appBarTheme : Colors.grey;
+    Color customColorTitle =
+        (route == currentRoute) ? Themes.appBarTheme : Colors.black;
     return InkWell(
         onTap: () {
-          if (currentRoute != route) Navigator.of(context).pushNamed(route);
+          if (currentRoute != route) {
+            if (Navigator.canPop(context))
+              Navigator.of(context).pushReplacementNamed(route);
+            else
+              Navigator.pushNamed(context, route);
+          }
         },
         child: Container(
           color: customColor,
