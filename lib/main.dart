@@ -22,14 +22,13 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SavedDataAdapter());
   await Hive.openBox('savedData');
-
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(myApp());
+    runApp(MyApp());
   });
 }
 
-class myApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class myApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
       title: "Timer App",
-      initialRoute: "/welcome",
+      initialRoute: "/statistics",
       routes: <String, WidgetBuilder>{
         "/welcome": (BuildContext context) => new WelcomePage(),
         "/exercises": (BuildContext context) => new Exercises(),

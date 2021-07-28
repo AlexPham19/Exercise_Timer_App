@@ -81,7 +81,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
               end: Alignment.bottomRight,
               colors: <Color>[Themes.readyThemeStart, Themes.readyThemeEnd],
               tileMode:
-              TileMode.repeated, // repeats the gradient over the canvas
+                  TileMode.repeated, // repeats the gradient over the canvas
             ),
           );
           Time.add(timeToChangeRep);
@@ -95,7 +95,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
               end: Alignment.bottomRight,
               colors: <Color>[Themes.restThemeStart, Themes.restThemeEnd],
               tileMode:
-              TileMode.repeated, // repeats the gradient over the canvas
+                  TileMode.repeated, // repeats the gradient over the canvas
             ),
           );
           States.add('Rest');
@@ -209,7 +209,12 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                               hiveBox.add(SavedData(
                                                   totalDuration,
                                                   DateTime.now(),
-                                                  true));
+                                                  true,
+                                                  -1,
+                                                  -1,
+                                                  int.parse(numberExercises),
+                                                  int.parse(
+                                                      numberRepetitions)));
                                               Navigator.pushReplacementNamed(
                                                   context,
                                                   '/congratulation-page');
@@ -299,7 +304,10 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                         controller!.reverse(from: 1.0);
                       });
                     },
-                    child: Text('Thêm 15 giây nghỉ', style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      'Thêm 15 giây nghỉ',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 )
               ],

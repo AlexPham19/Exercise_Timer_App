@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
+import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/model/savedData.dart';
 import 'package:my_first_flutter_app/widgets/drawer.dart';
 import 'package:my_first_flutter_app/widgets/main-app-bar-with-drawer.dart';
 
 class History extends StatefulWidget {
   static const id = '/history';
+
   @override
   _HistoryState createState() => _HistoryState();
 }
@@ -26,7 +27,10 @@ class _HistoryState extends State<History> {
       ),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
-        child: MainAppBar(title: 'History', scaffoldKey: _scaffoldKey,),
+        child: MainAppBar(
+          title: 'History',
+          scaffoldKey: _scaffoldKey,
+        ),
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -35,70 +39,132 @@ class _HistoryState extends State<History> {
           itemBuilder: (BuildContext context, int index) {
             SavedData data = hiveBox.getAt(index);
             return Container(
-              padding: EdgeInsets.only(left: 16, top: 8, bottom: 8, right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(right: 8),
-                          child: Text(DateFormat.yMd()
-                              .add_Hm()
-                              .format(data.date)
-                              .toString())),
-                      Container(
-                          padding: EdgeInsets.only(right: 8),
-                          child: Text(data.durationSeconds.toString())),
-                      Container(
-                          padding: EdgeInsets.only(right: 8),
-                          child: Text(data.isCustom.toString())),
-                    ],
+                  Material(
+                    elevation: 4,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8)),
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8)),
+                        color: Colors.white,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_today_outlined,
+                                color: Colors.grey,
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left: 10),
+                                child: Text(
+                                  data.date.day.toString() +
+                                      " thg " +
+                                      data.date.month.toString() +
+                                      ' ' +
+                                      data.date.year.toString(),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              )
+                            ],
+                          ),
+                          RichText(
+                            text: TextSpan(
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Themes.appBarTheme,
+                                ),
+                                text: (data.durationSeconds ~/ 60).toString(),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' min ',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        (data.durationSeconds % 60).toString(),
+                                  ),
+                                  TextSpan(
+                                    text: ' s',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  Container(
-                      child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Column(
-                                        children: [
-                                          Text(
-                                              'Bạn có chắc là xóa phần lưu này (vĩnh viễn)?'),
-                                        ],
-                                      ),
-                                      actions: [
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                Hive.box('savedData')
-                                                    .deleteAt(index);
-                                                Navigator.pop(context);
-                                                ScaffoldMessenger.of(context)
-                                                  ..removeCurrentSnackBar()
-                                                  ..showSnackBar(SnackBar(content: Text('Delete successfully!')));
-                                              });
-                                            },
-                                            child: Text('Có')),
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text('Đéo')),
-                                      ],
-                                    );
-                                  });
-                            });
-                          },
-                          child: Icon(Icons.clear)))
+                  Material(
+                    elevation: 4,
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(8),
+                        bottomRight: Radius.circular(8)),
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8)),
+                        color: Color.fromRGBO(251, 251, 251, 1.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          data.exerciseTime != -1 ? textComponent('Tập luyện', data.exerciseTime.toString(), true) : Text('(Custom Exercise)'),
+                          data.restTime != -1 ? textComponent('Nghỉ ngơi', data.restTime.toString(), true) : Container(),
+                          textComponent('Bài tập', data.numberExercise.toString(), false),
+                          textComponent('Vòng tập', data.numberRepetitions.toString(), false),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             );
           },
         ),
       ),
+    );
+  }
+
+  Widget textComponent(String title, String number, bool isTime) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(number, style: TextStyle(color: Themes.appBarTheme, fontSize: 20, fontWeight: FontWeight.w500)),
+            isTime == true ? Container(
+                padding: EdgeInsets.only(top: 6),child: Text(' s ')) : Container(),
+          ],
+        )
+      ],
     );
   }
 }

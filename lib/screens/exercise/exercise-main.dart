@@ -201,7 +201,16 @@ class _ExerciseMainState extends State<ExerciseMain>
                                                       int.parse(
                                                           NumberOfRepetitions),
                                                   DateTime.now(),
-                                                  false));
+                                                  false,
+                                                  int.parse(MinutesExercise *
+                                                          60) +
+                                                      int.parse(
+                                                          SecondsExercise),
+                                                  int.parse(MinutesRest) * 60 +
+                                                      int.parse(SecondsRest),
+                                                  int.parse(NumberOfExercises),
+                                                  int.parse(
+                                                      NumberOfRepetitions)));
                                               Navigator.pushReplacementNamed(
                                                   context,
                                                   '/congratulation-page');
