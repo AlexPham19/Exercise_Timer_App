@@ -20,19 +20,31 @@ class SavedDataAdapter extends TypeAdapter<SavedData> {
       fields[0] as int,
       fields[1] as DateTime,
       fields[2] as bool,
+      fields[3] as int,
+      fields[4] as int,
+      fields[5] as int,
+      fields[6] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, SavedData obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.durationSeconds)
       ..writeByte(1)
       ..write(obj.date)
       ..writeByte(2)
-      ..write(obj.isCustom);
+      ..write(obj.isCustom)
+      ..writeByte(3)
+      ..write(obj.exerciseTime)
+      ..writeByte(4)
+      ..write(obj.restTime)
+      ..writeByte(5)
+      ..write(obj.numberExercise)
+      ..writeByte(6)
+      ..write(obj.numberRepetitions);
   }
 
   @override

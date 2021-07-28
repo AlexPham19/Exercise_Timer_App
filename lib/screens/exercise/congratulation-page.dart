@@ -95,7 +95,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                           Themes.restThemeMain,
                           Themes.restIconMain,
                           'Tổng bài tập đã hoàn tất',
-                          '1',
+                          (hiveBox.getAt(hiveBox.length - 1).numberExercise * hiveBox.getAt(hiveBox.length - 1).numberRepetitions).toString(),
                           Icons.directions_run),
                       componentInfo(
                           Themes.numberRepetitionsThemeMain,
