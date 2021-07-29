@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -22,9 +21,102 @@ class _StatisticsState extends State<Statistics> {
 
   int numberConsecutiveDate = 0;
 
+  int totalExercises = 0;
+  int totalDurations = 0;
+
+  int totalDays7Days = 0;
+  int totalExercises7Days = 0;
+  int totalDurations7Days = 0;
+
+  int totalDays30Days = 0;
+  int totalExercises30Days = 0;
+  int totalDurations30Days = 0;
+
   @override
   void initState() {
-    _controller = PageController(initialPage: 0, keepPage: true);
+    setState(() {
+      _controller = PageController(initialPage: 0, keepPage: true);
+    });
+    totalDays7Days = 0;
+    totalExercises7Days = 0;
+    totalDurations7Days = 0;
+    numberConsecutiveDate = 0;
+    totalExercises = 0;
+    totalDurations = 0;
+    totalDays30Days = 0;
+    totalExercises30Days = 0;
+    totalDurations30Days = 0;
+    if (hiveBox.length == 1) {
+      setState(() {
+        numberConsecutiveDate = 1;
+      });
+    } else {
+      for (int i = hiveBox.length - 1; i > 0; i--) {
+        if (i == hiveBox.length - 1) {
+          if (hiveBox.getAt(i).date.day == DateTime.now().day) {
+            setState(() {
+              numberConsecutiveDate = 1;
+            });
+          } else
+            break;
+        }
+        if (daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date)
+                .abs() <=
+            1) {
+          if (daysBetween(hiveBox.getAt(i).date.subtract(Duration(days: 1)),
+                  hiveBox.getAt(i - 1).date) ==
+              0) {
+            setState(() {
+              numberConsecutiveDate += 1;
+            });
+          }
+        } else
+          break;
+      }
+    }
+
+    for (int i = 0; i < hiveBox.length; i++) {
+      if (daysBetween(hiveBox.getAt(i).date, DateTime.now()) == 0 &&
+          hiveBox.getAt(i).date.day == DateTime.now().day) {
+        setState(() {
+          totalDurations +=
+              int.parse(hiveBox.getAt(i).durationSeconds.toString());
+          totalExercises = totalExercises +
+              int.parse(hiveBox.getAt(i).numberExercise.toString()) *
+                  int.parse(hiveBox.getAt(i).numberRepetitions.toString());
+        });
+      }
+    }
+    for (int i = 0; i < hiveBox.length; i++) {
+      if (daysBetween(hiveBox.getAt(i).date, DateTime.now()) <= 29 &&
+          hiveBox.getAt(i).date.day !=
+              DateTime.now().subtract(Duration(days: 30))) {
+        setState(() {
+          totalDays30Days += 1;
+          totalDurations30Days +=
+              int.parse(hiveBox.getAt(i).durationSeconds.toString());
+          totalExercises30Days = totalExercises30Days +
+              int.parse(hiveBox.getAt(i).numberExercise.toString()) *
+                  int.parse(hiveBox.getAt(i).numberRepetitions.toString());
+        });
+      }
+    }
+    for (int i = 0; i < hiveBox.length; i++) {
+      if (daysBetween(hiveBox.getAt(i).date, DateTime.now()) <= 6 &&
+          hiveBox.getAt(i).date.day !=
+              DateTime.now().subtract(Duration(days: 7))) {
+        setState(() {
+          totalDays7Days += 1;
+          totalDurations7Days +=
+              int.parse(hiveBox.getAt(i).durationSeconds.toString());
+          totalExercises7Days = totalExercises7Days +
+              int.parse(hiveBox.getAt(i).numberExercise.toString()) *
+                  int.parse(hiveBox.getAt(i).numberRepetitions.toString());
+        });
+      }
+    }
+
+
     super.initState();
   }
 
@@ -40,19 +132,12 @@ class _StatisticsState extends State<Statistics> {
       _controller.animateToPage(page,
           duration: Duration(milliseconds: 500),
           curve: Curves.fastLinearToSlowEaseIn);
-      print(_selectedPage);
+      //print(_selectedPage);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    for (int i = hiveBox.length - 1; i > 1; i--) {
-      if (daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date) <= 1) {
-        if (daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date) == 1)
-          numberConsecutiveDate += 1;
-      } else
-        break;
-    }
     return Scaffold(
       key: _scaffoldKey,
       drawer: MaterialDrawer(
@@ -149,17 +234,26 @@ class _StatisticsState extends State<Statistics> {
                   children: [
                     Container(
                       child: Center(
-                        child: statisticsRow(numberConsecutiveDate, 1, 0), // Chưa rõ cách tính
+                        child: statisticsRow(
+                            numberConsecutiveDate,
+                            totalExercises,
+                            totalDurations,
+                            true), // Chưa rõ cách tính
                       ),
                     ),
                     Container(
                       child: Center(
-                        child: statisticsRow(1, 0, 0), // dummy data. Mình chưa rõ cách tính
+                        child: statisticsRow(
+                            1,
+                            totalExercises7Days,
+                            totalDurations7Days,
+                            false), // dummy data. Mình chưa rõ cách tính
                       ),
                     ),
                     Container(
                       child: Center(
-                        child: statisticsRow(1, 0, 0), // Chưa rõ cách tính
+                        child: statisticsRow(1, totalExercises30Days,
+                            totalDurations30Days, false), // Chưa rõ cách tính
                       ),
                     )
                   ],
@@ -172,14 +266,18 @@ class _StatisticsState extends State<Statistics> {
     );
   }
 
-  Widget statisticsRow(
-      int consecutiveDays, int numberOfExercises, int durationSeconds) {
+  Widget statisticsRow(int consecutiveDays, int numberOfExercises,
+      int durationSeconds, bool isOptionDaySelected) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          infoColumn(Themes.exerciseIconMain, Themes.exerciseThemeMain,
-              Icons.done, 'Số ngày liên tục', consecutiveDays.toString()),
+          infoColumn(
+              Themes.exerciseIconMain,
+              Themes.exerciseThemeMain,
+              Icons.done,
+              isOptionDaySelected ? 'Số ngày tập liên tiếp' : 'Số ngày đã tập',
+              consecutiveDays.toString()),
           infoColumn(
               Themes.restIconMain,
               Themes.restThemeMain,
@@ -207,6 +305,7 @@ class _StatisticsState extends State<Statistics> {
       child: Column(
         children: [
           FloatingActionButton(
+            heroTag: title,
             backgroundColor: colorBackground,
             onPressed: null,
             child: Icon(
