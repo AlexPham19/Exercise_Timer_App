@@ -23,18 +23,39 @@ class _CongratulationPageState extends State<CongratulationPage> {
   void initState() {
     lastExerciseMin = hiveBox.getAt(hiveBox.length - 1).durationSeconds ~/ 60;
     lastExerciseSec = hiveBox.getAt(hiveBox.length - 1).durationSeconds % 60;
+    for (int i = hiveBox.length - 1; i >= 1; i--) {
+      if (i == hiveBox.length - 1) {
+        if (hiveBox.getAt(i).date.day == DateTime.now().day) {
+          numberConsecutiveDate = 1;
+        } else
+          break;
+      }
+      print(daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date)
+          .toString() +
+          "?");
+      if (daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date).abs() <=
+          1) {
+        print(daysBetween(hiveBox.getAt(i - 1).date,
+            hiveBox.getAt(i).date.subtract(Duration(days: 1)))
+            .toString() +
+            "!!");
+        if (daysBetween(hiveBox.getAt(i).date.subtract(Duration(days: 1)),
+            hiveBox.getAt(i - 1).date) ==
+            0) {
+          setState(() {
+            numberConsecutiveDate += 1;
+          });
+          print("!!" + numberConsecutiveDate.toString());
+        }
+      } else
+        break;
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    for (int i = hiveBox.length - 1; i > 1; i--) {
-      if (daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date) <= 1) {
-        if (daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date) == 1)
-          numberConsecutiveDate += 1;
-      } else
-        break;
-    }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -199,6 +220,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
       child: Column(
         children: [
           FloatingActionButton(
+            heroTag: title,
             backgroundColor: colorBackground,
             onPressed: null,
             child: Icon(
