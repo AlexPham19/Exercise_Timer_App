@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/model/savedData.dart';
+import 'package:my_first_flutter_app/screens/welcome/welcome.dart';
 import 'package:my_first_flutter_app/widgets/drawer.dart';
 import 'package:my_first_flutter_app/widgets/main-app-bar-with-drawer.dart';
 
@@ -50,38 +51,41 @@ class _HistoryState extends State<History> {
                   if (Platform.isIOS)
                     showCupertinoModalPopup(
                       context: context,
-                      builder: (BuildContext context) => CupertinoActionSheet(
-                        actions: <CupertinoActionSheetAction>[
-                          CupertinoActionSheetAction(
-                            child: const Text('Use this setting'),
-                            onPressed: () {
-                              if (hiveBox.getAt(index).isCustom == true) {
-                                ScaffoldMessenger.of(context)
-                                  ..removeCurrentSnackBar()
-                                  ..showSnackBar(SnackBar(
-                                      content: Text(
-                                          'This setting could not be used, as this workout is a custom one')));
-                              } else {
-                                ScaffoldMessenger.of(context)
-                                  ..removeCurrentSnackBar()
-                                  ..showSnackBar(SnackBar(
-                                      content: Text(
-                                          'This feature is currently under development')));
-                              }
-                              Navigator.pop(context);
-                            },
+                      builder: (BuildContext context) =>
+                          CupertinoActionSheet(
+                            actions: <CupertinoActionSheetAction>[
+                              CupertinoActionSheetAction(
+                                child: const Text('Use this setting'),
+                                onPressed: () {
+                                  if (hiveBox
+                                      .getAt(index)
+                                      .isCustom == true) {
+                                    ScaffoldMessenger.of(context)
+                                      ..removeCurrentSnackBar()
+                                      ..showSnackBar(SnackBar(
+                                          content: Text(
+                                              'This setting could not be used, as this workout is a custom one')));
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                      ..removeCurrentSnackBar()
+                                      ..showSnackBar(SnackBar(
+                                          content: Text(
+                                              'This feature is currently under development')));
+                                  }
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              CupertinoActionSheetAction(
+                                child: const Text('Delete Workout'),
+                                onPressed: () {
+                                  setState(() {
+                                    hiveBox.deleteAt(index);
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
                           ),
-                          CupertinoActionSheetAction(
-                            child: const Text('Delete Workout'),
-                            onPressed: () {
-                              setState(() {
-                                hiveBox.deleteAt(index);
-                              });
-                              Navigator.pop(context);
-                            },
-                          )
-                        ],
-                      ),
                     );
                   else
                     showModalBottomSheet(
@@ -94,13 +98,47 @@ class _HistoryState extends State<History> {
                                 //leading: new Icon(Icons.photo),
                                 title: new Text('Use this setting'),
                                 onTap: () {
-                                  if (hiveBox.getAt(index).isCustom == true) {
+                                  if (hiveBox
+                                      .getAt(index)
+                                      .isCustom == true) {
                                     ScaffoldMessenger.of(context)
                                       ..removeCurrentSnackBar()
                                       ..showSnackBar(SnackBar(
                                           content: Text(
                                               'This setting could not be used, as this workout is a custom one')));
                                   } else {
+                                    setState(() {
+                                      NumberOfExercises =
+                                          data.numberExercise.toString();
+                                      NumberOfRepetitions =
+                                          data.numberRepetitions.toString();
+                                      SecondsRest = (data.restTime % 60)
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      MinutesRest = (data.restTime ~/ 60)
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      SecondsExercise = (data.exerciseTime % 60)
+                                          .toString()
+                                          .padLeft(2, '0');
+                                      MinutesExercise =
+                                          (data.exerciseTime ~/ 60)
+                                              .toString()
+                                              .padLeft(2, '0');
+                                      MinutesToRepeat = (data.changeRepTime ~/ 60).toString().padLeft(2, '0');
+                                      SecondsToRepeat = (data.changeRepTime % 60).toString().padLeft(2, '0');
+                                      int duration = data.exerciseTime *
+                                          data.numberExercise *
+                                          data.numberRepetitions +
+                                          data.restTime *
+                                              data.numberRepetitions *
+                                              (data.numberExercise - 1) +
+                                          data.changeRepTime *
+                                              (data.numberRepetitions - 1);
+                                      MinutesTotal = (duration ~/ 60).toString().padLeft(2, '0');
+                                      SecondsTotal = (duration % 60).toString().padLeft(2, '0');
+                                      // Còn thời gian để lặp lại nữa
+                                    });
                                     ScaffoldMessenger.of(context)
                                       ..removeCurrentSnackBar()
                                       ..showSnackBar(SnackBar(
@@ -133,7 +171,7 @@ class _HistoryState extends State<History> {
                           topRight: Radius.circular(8)),
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+                        EdgeInsets.symmetric(horizontal: 16, vertical: 18),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(8),
@@ -205,7 +243,7 @@ class _HistoryState extends State<History> {
                           bottomRight: Radius.circular(8)),
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(8),
@@ -217,11 +255,11 @@ class _HistoryState extends State<History> {
                           children: [
                             data.exerciseTime != -1
                                 ? textComponent('Tập luyện',
-                                    data.exerciseTime.toString(), true)
+                                data.exerciseTime.toString(), true)
                                 : Text('(Custom Exercise)'),
                             data.restTime != -1
                                 ? textComponent(
-                                    'Nghỉ ngơi', data.restTime.toString(), true)
+                                'Nghỉ ngơi', data.restTime.toString(), true)
                                 : Container(),
                             textComponent('Bài tập',
                                 data.numberExercise.toString(), false),
@@ -256,7 +294,7 @@ class _HistoryState extends State<History> {
                     fontWeight: FontWeight.w500)),
             isTime == true
                 ? Container(
-                    padding: EdgeInsets.only(top: 6), child: Text(' s '))
+                padding: EdgeInsets.only(top: 6), child: Text(' s '))
                 : Container(),
           ],
         )

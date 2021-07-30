@@ -20,6 +20,7 @@ dependencies:
   hive_flutter: ^1.0.0
   intl: ^0.17.0
   just_audio: ^0.9.4
+  flutter_tts: ^3.2.2
 
 dev_dependencies:
   flutter_test:

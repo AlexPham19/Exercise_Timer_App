@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/model/exerciseData.dart';
 import 'package:my_first_flutter_app/model/savedData.dart';
@@ -30,13 +31,22 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
   int index = 0;
   bool first = false;
 
+  final playerShort2Sec = AudioPlayer();
+  final playerShort1Sec = AudioPlayer();
+  final playerShort0Sec = AudioPlayer();
+  final playerLong = AudioPlayer();
+
   String get timerString {
     Duration duration = controller!.duration! * (controller!.value);
-    return '${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
+    return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
   void initState() {
+    playerShort2Sec.setAsset('assets/audio/beep-short.mp3');
+    playerShort1Sec.setAsset('assets/audio/beep-short.mp3');
+    playerShort0Sec.setAsset('assets/audio/beep-short.mp3');
+    playerLong.setAsset('assets/audio/beep-long.mp3');
     counterSeconds = 10;
     counterMinutes = 0;
     controller = AnimationController(
@@ -128,6 +138,10 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
     States.clear();
     Time.clear();
     TimerColors.clear();
+    playerShort2Sec.dispose();
+    playerShort1Sec.dispose();
+    playerShort0Sec.dispose();
+    playerLong.dispose();
     super.dispose();
   }
 
@@ -174,7 +188,15 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                             child: AnimatedBuilder(
                               animation: controller!,
                               builder: (BuildContext context, Widget? child) {
-                                return Container();
+                                print('timerString = ' + timerString);
+                                // Nhớ dừng audio khi bấm nút dừng
+                                if (timerString == '00:02')
+                                  playerShort2Sec.play();
+                                if (timerString == '00:01')
+                                  playerShort1Sec.play();
+                                if (timerString == '00:00')
+                                  playerShort0Sec.play();
+                                return Container(child: Text('.'),);
                               },
                             ),
                           ),
@@ -194,6 +216,18 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                       ..addStatusListener((status) {
                                         if (controller!.value == 0) {
                                           print(index);
+                                          playerLong.play();
+                                          playerLong
+                                              .seek(Duration(milliseconds: 0));
+                                          playerShort2Sec
+                                              .seek(Duration(milliseconds: 0));
+                                          playerShort2Sec.pause();
+                                          playerShort1Sec
+                                              .seek(Duration(milliseconds: 0));
+                                          playerShort1Sec.pause();
+                                          playerShort0Sec
+                                              .seek(Duration(milliseconds: 0));
+                                          playerShort0Sec.pause();
                                           if (index >= States.length - 1) {
                                             setState(() {
                                               int totalDuration = 0;
@@ -214,7 +248,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                                   -1,
                                                   int.parse(numberExercises),
                                                   int.parse(
-                                                      numberRepetitions)));
+                                                      numberRepetitions), timeToChangeRep));
                                               Navigator.pushReplacementNamed(
                                                   context,
                                                   '/congratulation-page');
