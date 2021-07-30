@@ -17,6 +17,8 @@ class SavedData {
   final int numberExercise;
   @HiveField(6)
   final int numberRepetitions;
+  @HiveField(7)
+  final int changeRepTime;
 
-  SavedData(this.durationSeconds, this.date, this.isCustom, this.exerciseTime, this.restTime, this.numberExercise, this.numberRepetitions);
+  SavedData(this.durationSeconds, this.date, this.isCustom, this.exerciseTime, this.restTime, this.numberExercise, this.numberRepetitions, this.changeRepTime);
 }

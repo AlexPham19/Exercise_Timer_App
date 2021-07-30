@@ -4,16 +4,16 @@ import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/widgets/drawer.dart';
 import 'package:my_first_flutter_app/widgets/main-app-bar-with-drawer.dart';
 
-String MinutesTotal = '',
-    SecondsTotal = '',
-    MinutesExercise = '',
-    SecondsExercise = '',
-    MinutesRest = '',
-    SecondsRest = '',
-    NumberOfExercises = '',
-    NumberOfRepetitions = '',
-    MinutesToRepeat = '',
-    SecondsToRepeat = '';
+String MinutesTotal = '00',
+    SecondsTotal = '35',
+    MinutesExercise = '00',
+    SecondsExercise = '05',
+    MinutesRest = '00',
+    SecondsRest = '05',
+    NumberOfExercises = '2',
+    NumberOfRepetitions = '2',
+    MinutesToRepeat = '00',
+    SecondsToRepeat = '05';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -25,16 +25,6 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   void initState() {
-    MinutesTotal = '00';
-    SecondsTotal = '35';
-    MinutesExercise = '00';
-    SecondsExercise = '05';
-    MinutesRest = '00';
-    SecondsRest = '05';
-    NumberOfExercises = '2';
-    NumberOfRepetitions = '2';
-    MinutesToRepeat = '00';
-    SecondsToRepeat = '05';
     super.initState();
   }
 

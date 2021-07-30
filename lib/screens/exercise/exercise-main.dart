@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
@@ -13,7 +14,6 @@ class ExerciseMain extends StatefulWidget {
   _ExerciseMainState createState() => _ExerciseMainState();
 }
 
-bool needsToBeep = true;
 int minutesExercise = int.parse(MinutesExercise);
 int secondsExercise = int.parse(SecondsExercise);
 int minutesRest = int.parse(MinutesRest);
@@ -32,6 +32,7 @@ List<Color> TimerColors = [];
 List<LinearGradient> ThemeGradients = [];
 List<Color> BorderColors = [];
 
+int soundType = 0;
 class _ExerciseMainState extends State<ExerciseMain>
     with TickerProviderStateMixin {
   int index = 0;
@@ -42,15 +43,26 @@ class _ExerciseMainState extends State<ExerciseMain>
   final playerShort1Sec = AudioPlayer();
   final playerShort0Sec = AudioPlayer();
   final playerLong = AudioPlayer();
+  FlutterTts flutterTts = FlutterTts();
 
   String get timerString {
     Duration duration = controller!.duration! * (controller!.value);
+
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 
   @override
   void initState() {
-    needsToBeep = true;
+    setState(() {
+      soundType = 1;
+    });
+    flutterTts.awaitSpeakCompletion(true);
+    flutterTts.setLanguage("en-US");
+    flutterTts.setSpeechRate(0.5);
+    flutterTts.setVolume(1.0);
+    flutterTts.setPitch(1.0);
+    flutterTts.speak('Get ready');
+
     playerShort2Sec.setAsset('assets/audio/beep-short.mp3');
     playerShort1Sec.setAsset('assets/audio/beep-short.mp3');
     playerShort0Sec.setAsset('assets/audio/beep-short.mp3');
@@ -140,7 +152,6 @@ class _ExerciseMainState extends State<ExerciseMain>
     playerShort1Sec.dispose();
     playerShort0Sec.dispose();
     playerLong.dispose();
-    //TimerColors.clear();
     super.dispose();
   }
 
@@ -179,13 +190,15 @@ class _ExerciseMainState extends State<ExerciseMain>
                               animation: controller!,
                               builder: (BuildContext context, Widget? child) {
                                 print('timerString = ' + timerString);
-                                // Nhớ dừng audio khi bấm nút dừng
-                                if (timerString == '00:02')
-                                  playerShort2Sec.play();
-                                if (timerString == '00:01')
-                                  playerShort1Sec.play();
-                                if (timerString == '00:00')
-                                  playerShort0Sec.play();
+                                if (timerString == '00:02') {
+                                  playSound(soundType, 'three', playerShort2Sec);
+                                }
+                                if (timerString == '00:01') {
+                                  playSound(soundType, 'two', playerShort1Sec);
+                                }
+                                if (timerString == '00:00') {
+                                  playSound(soundType, 'one', playerShort0Sec);
+                                }
                                 return new CustomPaint(
                                   painter: TimerPainter(
                                     animation: controller!,
@@ -210,8 +223,19 @@ class _ExerciseMainState extends State<ExerciseMain>
                                 AnimatedBuilder(
                                     animation: controller!
                                       ..addStatusListener((status) {
+                                        if(timerString == '00:08'){
+                                          setState(() {
+                                            print("HOW");
+                                          });
+                                        }
                                         if (controller!.value == 0) {
-                                          playerLong.play();
+                                          print('WHY');
+                                          String text =
+                                              States[index] == 'Exercise'
+                                                  ? 'Stop'
+                                                  : 'Start';
+                                          playSound(soundType, text, playerLong);
+
                                           playerLong
                                               .seek(Duration(milliseconds: 0));
                                           playerShort2Sec
@@ -246,7 +270,11 @@ class _ExerciseMainState extends State<ExerciseMain>
                                                       int.parse(SecondsRest),
                                                   int.parse(NumberOfExercises),
                                                   int.parse(
-                                                      NumberOfRepetitions)));
+                                                      NumberOfRepetitions),
+                                                  int.parse(MinutesToRepeat) *
+                                                          60 +
+                                                      int.parse(
+                                                          SecondsToRepeat)));
                                               Navigator.pushReplacementNamed(
                                                   context,
                                                   '/congratulation-page');
@@ -345,6 +373,16 @@ class _ExerciseMainState extends State<ExerciseMain>
         ),
       ),
     );
+  }
+
+  void playSound(int type, String text, AudioPlayer player) async {
+    if (type == 0) {
+      flutterTts.speak(text);
+
+    } else if (type == 1) {
+      player.play();
+    }
+    flutterTts.stop();
   }
 
   void action() {
