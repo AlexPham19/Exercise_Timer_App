@@ -139,11 +139,6 @@ class _HistoryState extends State<History> {
                                       SecondsTotal = (duration % 60).toString().padLeft(2, '0');
                                       // Còn thời gian để lặp lại nữa
                                     });
-                                    ScaffoldMessenger.of(context)
-                                      ..removeCurrentSnackBar()
-                                      ..showSnackBar(SnackBar(
-                                          content: Text(
-                                              'This feature is currently under development')));
                                   }
                                   Navigator.pop(context);
                                 },

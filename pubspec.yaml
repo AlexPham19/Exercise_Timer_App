@@ -21,6 +21,7 @@ dependencies:
   intl: ^0.17.0
   just_audio: ^0.9.4
   flutter_tts: ^3.2.2
+  flutter_local_notifications: ^8.0.0
 
 dev_dependencies:
   flutter_test:

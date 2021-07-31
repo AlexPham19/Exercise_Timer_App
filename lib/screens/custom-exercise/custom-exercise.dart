@@ -17,12 +17,13 @@ class CustomExercise extends StatefulWidget {
 String numberExercises = '', numberRepetitions = '';
 int timeToChangeRep = 0;
 List<ExerciseData> listCustomExercise = [];
+List<ExerciseDetails> allPossibleExercise = [];
 
 class _CustomExerciseState extends State<CustomExercise> {
   List<String> names = [];
 
   bool isDefaultButtonOn = false;
-  List<ExerciseDetails> allPossibleExercise = [];
+
   int indexExercise = 1;
   TextEditingController controllerName = new TextEditingController();
   TextEditingController controllerExerciseMinutes =
@@ -83,6 +84,7 @@ class _CustomExerciseState extends State<CustomExercise> {
                   if (snapshot.hasData) {
                     for (int i = 0; i < snapshot.data!.length; i++) {
                       names.add(snapshot.data![i].name);
+                      allPossibleExercise.add(snapshot.data![i]);
                     }
                   }
                   return Container();

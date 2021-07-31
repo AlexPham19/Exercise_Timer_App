@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
@@ -30,11 +31,13 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
   AnimationController? controller;
   int index = 0;
   bool first = false;
+  int soundType = 0;
 
   final playerShort2Sec = AudioPlayer();
   final playerShort1Sec = AudioPlayer();
   final playerShort0Sec = AudioPlayer();
   final playerLong = AudioPlayer();
+  FlutterTts flutterTts = FlutterTts();
 
   String get timerString {
     Duration duration = controller!.duration! * (controller!.value);
@@ -43,10 +46,24 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
 
   @override
   void initState() {
+    soundType = Hive.box('settings').get('soundType');
+
+    flutterTts.awaitSpeakCompletion(true);
+    flutterTts.setLanguage("en-US");
+    flutterTts.setSpeechRate(0.5);
+    flutterTts.setVolume(1.0);
+    flutterTts.setPitch(1.0);
+    //flutterTts.speak('Get ready');
+    playSound(soundType, 'get ready', playerLong);
+
     playerShort2Sec.setAsset('assets/audio/beep-short.mp3');
     playerShort1Sec.setAsset('assets/audio/beep-short.mp3');
     playerShort0Sec.setAsset('assets/audio/beep-short.mp3');
     playerLong.setAsset('assets/audio/beep-long.mp3');
+    playerShort2Sec.seek(Duration(seconds: 0));
+    playerShort1Sec.seek(Duration(seconds: 0));
+    playerShort0Sec.seek(Duration(seconds: 0));
+
     counterSeconds = 10;
     counterMinutes = 0;
     controller = AnimationController(
@@ -190,13 +207,19 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                               builder: (BuildContext context, Widget? child) {
                                 print('timerString = ' + timerString);
                                 // Nhớ dừng audio khi bấm nút dừng
-                                if (timerString == '00:02')
-                                  playerShort2Sec.play();
-                                if (timerString == '00:01')
-                                  playerShort1Sec.play();
-                                if (timerString == '00:00')
-                                  playerShort0Sec.play();
-                                return Container(child: Text('.'),);
+                                if (timerString == '00:02') {
+                                  playSound(
+                                      soundType, 'three', playerShort2Sec);
+                                }
+                                if (timerString == '00:01') {
+                                  playSound(soundType, 'two', playerShort1Sec);
+                                }
+                                if (timerString == '00:00') {
+                                  playSound(soundType, 'one', playerShort0Sec);
+                                }
+                                return Container(
+                                  child: Text('.'),
+                                );
                               },
                             ),
                           ),
@@ -215,8 +238,13 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                     animation: controller!
                                       ..addStatusListener((status) {
                                         if (controller!.value == 0) {
-                                          print(index);
-                                          playerLong.play();
+                                          String text =
+                                              States[index] == 'Exercise'
+                                                  ? 'Stop'
+                                                  : 'Start';
+                                          playSound(
+                                              soundType, text, playerLong);
+
                                           playerLong
                                               .seek(Duration(milliseconds: 0));
                                           playerShort2Sec
@@ -228,6 +256,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                           playerShort0Sec
                                               .seek(Duration(milliseconds: 0));
                                           playerShort0Sec.pause();
+
                                           if (index >= States.length - 1) {
                                             setState(() {
                                               int totalDuration = 0;
@@ -247,8 +276,8 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                                   -1,
                                                   -1,
                                                   int.parse(numberExercises),
-                                                  int.parse(
-                                                      numberRepetitions), timeToChangeRep));
+                                                  int.parse(numberRepetitions),
+                                                  timeToChangeRep));
                                               Navigator.pushReplacementNamed(
                                                   context,
                                                   '/congratulation-page');
@@ -286,48 +315,103 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                   ),
                 ),
                 Container(
-                  width: 150,
-                  height: 150,
-                  padding: EdgeInsets.all(32.0),
-                  child: FloatingActionButton(
-                      elevation: 4.0,
-                      backgroundColor: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: AnimatedBuilder(
-                          animation: controller!,
-                          builder: (BuildContext context, Widget? child) {
-                            return new Icon(
-                              controller!.isAnimating
-                                  ? Icons.pause
-                                  : Icons.play_arrow,
-                              size: 40.0,
-                              color: TimerColors[index],
-                            );
-                          },
+                  width: double.infinity,
+                  child: Stack(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 150,
+                            height: 150,
+                            padding: EdgeInsets.all(32.0),
+                            child: FloatingActionButton(
+                                elevation: 4.0,
+                                backgroundColor: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: AnimatedBuilder(
+                                    animation: controller!,
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      return new Icon(
+                                        controller!.isAnimating
+                                            ? Icons.pause
+                                            : Icons.play_arrow,
+                                        size: 40.0,
+                                        color: TimerColors[index],
+                                      );
+                                    },
+                                  ),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    first = true;
+                                    if (index == States.length) dispose();
+                                    if (controller!.isAnimating)
+                                      controller!.stop();
+                                    else {
+                                      controller!.reverse(
+                                          from: controller!.value == 0.0
+                                              ? 1.0
+                                              : controller!.value);
+                                    }
+                                  });
+                                }),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        width: 150,
+                        height: 150,
+                        padding: EdgeInsets.all(32.0),
+                        alignment: FractionalOffset.centerRight,
+                        child: Visibility(
+                          visible: States[index] != 'Ready' &&
+                              States[index] != 'Time to change Rep' &&
+                              States[index] != 'Rest',
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              setState(() {
+                                if (controller!.isAnimating) controller!.stop();
+                              });
+                              String name = '', description = '';
+                              for (int i = 0;
+                                  i < allPossibleExercise.length;
+                                  i++) {
+                                if (allPossibleExercise[i].name ==
+                                    States[index]) {
+                                  setState(() {
+                                    name = States[index];
+                                    description = allPossibleExercise[i].help;
+                                  });
+                                }
+                              }
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('How to do $name:'),
+                                      content: Text(description),
+                                    );
+                                  });
+                            },
+                            child: Text(
+                              '?',
+                              style: TextStyle(fontSize: 28),
+                            ),
+                          ),
                         ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          first = true;
-                          if (index == States.length) dispose();
-                          if (controller!.isAnimating)
-                            controller!.stop();
-                          else {
-                            controller!.reverse(
-                                from: controller!.value == 0.0
-                                    ? 1.0
-                                    : controller!.value);
-                          }
-                        });
-                      }),
+                    ],
+                  ),
                 ),
                 Visibility(
                   visible: currentState == 'Rest',
                   child: InkWell(
                     onTap: () {
                       setState(() {
-                        controller!.stop();
+                        //controller!.stop();
                         controller = AnimationController(
                             vsync: this,
                             duration: Duration(
@@ -365,6 +449,15 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
         currentState = States[index];
       });
     }
+  }
+
+  void playSound(int type, String text, AudioPlayer player) async {
+    if (type == 0) {
+      flutterTts.speak(text);
+    } else if (type == 1) {
+      player.play();
+    }
+    //flutterTts.stop();
   }
 
   void showAskingDialog() {

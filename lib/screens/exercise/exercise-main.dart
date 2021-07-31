@@ -32,12 +32,12 @@ List<Color> TimerColors = [];
 List<LinearGradient> ThemeGradients = [];
 List<Color> BorderColors = [];
 
-int soundType = 0;
 class _ExerciseMainState extends State<ExerciseMain>
     with TickerProviderStateMixin {
   int index = 0;
   bool first = false;
   AnimationController? controller;
+  int soundType = 0;
 
   final playerShort2Sec = AudioPlayer();
   final playerShort1Sec = AudioPlayer();
@@ -53,20 +53,23 @@ class _ExerciseMainState extends State<ExerciseMain>
 
   @override
   void initState() {
-    setState(() {
-      soundType = 1;
-    });
+    soundType = Hive.box('settings').get('soundType');
+
     flutterTts.awaitSpeakCompletion(true);
     flutterTts.setLanguage("en-US");
     flutterTts.setSpeechRate(0.5);
     flutterTts.setVolume(1.0);
     flutterTts.setPitch(1.0);
-    flutterTts.speak('Get ready');
+    //flutterTts.speak('Get ready');
+    playSound(soundType, 'get ready', playerLong);
 
     playerShort2Sec.setAsset('assets/audio/beep-short.mp3');
     playerShort1Sec.setAsset('assets/audio/beep-short.mp3');
     playerShort0Sec.setAsset('assets/audio/beep-short.mp3');
     playerLong.setAsset('assets/audio/beep-long.mp3');
+    playerShort2Sec.seek(Duration(seconds: 0));
+    playerShort1Sec.seek(Duration(seconds: 0));
+    playerShort0Sec.seek(Duration(seconds: 0));
     counterSeconds = 10;
     counterMinutes = 0;
     int minutesExercise = int.parse(MinutesExercise);
@@ -364,7 +367,7 @@ class _ExerciseMainState extends State<ExerciseMain>
                         controller!.reverse(from: 1.0);
                       });
                     },
-                    child: Text('Thêm 15 giây nghỉ'),
+                    child: Text('Thêm 15 giây nghỉ', style: TextStyle(color: Colors.white),),
                   ),
                 )
               ],
@@ -382,7 +385,7 @@ class _ExerciseMainState extends State<ExerciseMain>
     } else if (type == 1) {
       player.play();
     }
-    flutterTts.stop();
+    //flutterTts.stop();
   }
 
   void action() {
