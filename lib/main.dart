@@ -17,11 +17,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'model/savedData.dart';
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();
   Hive.registerAdapter(SavedDataAdapter());
   await Hive.openBox('savedData');
+  await Hive.openBox('settings');
+  if(Hive.box('settings').get('soundType') == null){
+    Hive.box('settings').put('soundType', 1);
+  }
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MyApp());
@@ -36,7 +41,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
       title: "Timer App",
-      initialRoute: "/statistics",
+      initialRoute: "/settings",
       routes: <String, WidgetBuilder>{
         "/welcome": (BuildContext context) => new WelcomePage(),
         "/exercises": (BuildContext context) => new Exercises(),
