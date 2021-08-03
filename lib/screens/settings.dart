@@ -166,11 +166,16 @@ class _SettingsState extends State<Settings> {
                                       dateTime.hour.toString() +
                                       ":" +
                                       dateTime.minute.toString());
+                              timeReminded = '(' + dateTime.hour.toString() +
+                                  ":" +
+                                  dateTime.minute.toString() + ')';
                             } else if (value == true && hiveBoxData.isEmpty) {
                               showMessage('Chưa có dữ liệu!');
+                              timeReminded = '';
                             } else {
                               isReminded = value;
                               showMessage('Đã tắt thông báo!');
+                              timeReminded = '';
                               deleteNotification();
                             }
                           });

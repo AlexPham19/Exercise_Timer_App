@@ -3,91 +3,91 @@
     "id": 1,
     "name": "Donkey Kick",
     "description": "1. Make sure your back is flat (think: balancing a cup of coffee on your lower back), and tuck your chin slightly so the back of your neck is facing the ceiling. Without rounding your spine, engage your lower abdominals.\n2. Keeping the 90-degree bend in your right knee, slowly lift your leg straight back and up toward the ceiling. Your max height is right before your back starts to arch, or your hips begin to rotate. Return to the starting position.",
-    "image": "female_donkey_kick",
+    "image": "donkey-kick.gif",
     "count": false
   },
   {
     "id": 2,
     "name": "Bridges",
     "description": "1. Lie on your back with feet flat against the floor and knees bent.\nSqueeze your glutes and lift your hips off of the floor until your body forms a straight line from your knees to your shoulders.\n2. Pause at the top, then lower back down to the starting position.",
-    "image": "female_bridges",
+    "image": "bridge.gif",
     "count": false
   },
   {
     "id": 3,
     "name": "Forward Lunge",
     "description": "1. Start standing with feet hip-width apart and hands by sides.\n2. Take a big step forward with right foot and bend at knee until both knees form 90 degree angles while bringing hands to clasp in front of body.\n3. Press down into right heel to push back to starting position. That's one rep.",
-    "image": "female_forward_lunge",
+    "image": "forward-lunges.gif",
     "count": false
   },
   {
     "id": 4,
     "name": "Squat",
     "description": "1. Stand with your head facing forward and your chest held up and out.\n2. Place your feet shoulder-width apart or slightly wider. Extend your hands straight out in front of you to help keep your balance. You can also bend the elbows or clasp the fingers.\n3. Lower down so your thighs are as parallel to the floor as possible, with your knees over your ankles. Press your weight back into your heels.\n4. Keep your body tight, and push through your heels to bring yourself back to the starting position.",
-    "image": "female_squat",
+    "image": "squat.gif",
     "count": false
   },
   {
     "id": 5,
     "name": "Plank Left",
     "description": "1. Start in a low plank position with your body in a straight line, your elbows bent and under your shoulders and your feet hip-width apart.\n2. Lift your left leg to a 45-degree angle and hold.\n3. Switch legs and repeat.",
-    "image": "female_plank_left",
+    "image": "plank-left.png",
     "count": false
   },
   {
     "id": 6,
     "name": "Plank Right",
     "description": "1. Start in a low plank position with your body in a straight line, your elbows bent and under your shoulders and your feet hip-width apart.\n2. Lift your left leg to a 45-degree angle and hold.\n3. Switch legs and repeat.",
-    "image": "female_plank_right",
+    "image": "plank-right.png",
     "count": false
   },
   {
     "id": 7,
     "name": "Jumping Jacks",
     "description": "1. Start standing up with your legs together, a slight bend in knees, and hands resting on thighs.\n2. Keeping the knees bent, open the arms and legs out to the sides. Arms come above the head and legs wider than shoulders.\n3. Close your arms and legs back to your sides, returning to your start.",
-    "image": "female_jumping_jacks",
+    "image": "jumping-jacks.gif",
     "count": false
   },
   {
     "id": 8,
     "name": "Side Lunge",
     "description": "1. Start standing with legs slightly wider than shoulder-distance apart and toes pointed forward.\n2. Shift your body weight to one leg bending the knee until it reaches a 90-degree angle and the other leg is straight. Glutes are pressing back behind you. Return to center and switch sides.",
-    "image": "female_side_lunge",
+    "image": "side-lunges.gif",
     "count": false
   },
   {
     "id": 9,
     "name": "High Knees",
     "description": "1. Stand with your feet hip-width apart. Lift up your left knee to your chest.\n2. Switch to lift your right knee to your chest. Continue the movement, alternating legs and moving at a sprinting or running pace.",
-    "image": "female_high_knees",
+    "image": "high-knees.gif",
     "count": false
   },
   {
     "id": 10,
     "name": "Wall Push Up",
     "description": "1. Assume the starting position with feet and legs together, standing about 2 feet from a wall with your arms straight out in front of you. Your palms should be on the wall at about shoulder-level height and shoulder-width apart, with finger pointed toward the ceiling. If you feel like you’re reaching too far, move your feet closer.\n2. Bend your elbows and begin to lean your body toward the wall until your nose almost touches it. Ensure your back stays straight and your hips don’t sag.\n3. Push back to the starting position and repeat.",
-    "image": "female_wall_push_up",
+    "image": "wall-push-up.gif",
     "count": false
   },
   {
     "id": 11,
-    "name": "Stand Up Crunches",
+    "name": "Standing Bicycle",
     "description": "Stand with feet together, knees slightly bent, hands behind head, and left heel lifted. Brace abs in tight and lift left knee up as right shoulder rotates towards knee (try to touch). Lower back to start",
-    "image": "female_stand_up_crunches",
+    "image": "standing-bicycle.gif",
     "count": false
   },
   {
     "id": 12,
     "name": "Legs Raise",
     "description": "1. Lie on your back, legs straight and together.\n2. Keep your legs straight and lift them all the way up to the ceiling until your butt comes off the floor.\n3. Slowly lower your legs back down till they’re just above the floor. Hold for a moment.\n4. Raise your legs back up. Repeat.",
-    "image": "female_legs_raise",
+    "image": "legs-raise.gif",
     "count": false
   },
   {
     "id": 13,
     "name": "Wall Sit",
     "description": "1. Stand with your back to a wall, feet hip-width apart and slightly in front of you.\n2. Lean back into the wall, and slide down like you're sitting down onto a chair. Your knees should bent at 90 degrees with the knees above your ankles.\n3. Hold this position for 30 seconds.",
-    "image": "female_wall_sit",
+    "image": "wall-sit.png",
     "count": false
   },
   {

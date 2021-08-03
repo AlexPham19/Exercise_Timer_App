@@ -87,6 +87,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
         duration: Duration(seconds: counterSeconds + counterMinutes * 60));
     repetitions = int.parse(numberRepetitions);
     exercises = int.parse(numberExercises);
+    currentState = 'Ready';
     States.add('Ready');
     Time.add(10);
     TimerColors.add(Color.fromRGBO(252, 182, 8, 1.0));
@@ -167,6 +168,9 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
 
   @override
   void dispose() {
+    numberExercises = ''; numberRepetitions = '';
+    listCustomExercise.clear();
+    index = 0;
     controller!.dispose();
     States.clear();
     Time.clear();
@@ -175,6 +179,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
     playerShort1Sec.dispose();
     playerShort0Sec.dispose();
     playerLong.dispose();
+
     super.dispose();
   }
 
@@ -224,14 +229,19 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                 print('timerString = ' + timerString);
                                 // Nhớ dừng audio khi bấm nút dừng
                                 if (timerString == '00:02') {
-                                  playSound(
-                                      soundType, 'three', playerShort2Sec);
+                                  if (soundType == 0 || soundType == 1)
+                                    playSound(
+                                        soundType, 'three', playerShort2Sec);
                                 }
                                 if (timerString == '00:01') {
-                                  playSound(soundType, 'two', playerShort1Sec);
+                                  if (soundType == 0 || soundType == 1)
+                                    playSound(
+                                        soundType, 'two', playerShort1Sec);
                                 }
                                 if (timerString == '00:00') {
-                                  playSound(soundType, 'one', playerShort0Sec);
+                                  if (soundType == 0 || soundType == 1)
+                                    playSound(
+                                        soundType, 'one', playerShort0Sec);
                                 }
                                 return Container(
                                   child: Text('.'),
@@ -253,10 +263,16 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                 Visibility(
                                   visible: index % 2 == 1,
                                   child: Text(
-                                    ((index + 1) ~/ 2).toString() + "/" +
+                                    ((index + 1) ~/ 2).toString() +
+                                        "/" +
                                         (exercises * repetitions).toString(),
-                                    style: TextStyle(color: Colors.white, fontSize: 20),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
                                   ),
+                                ),
+                                Visibility(
+                                  visible: index % 2 == 1,
+                                  child: Image.asset('assets/gif/' + listCustomExercise[index ~/ 2].imgUrl, height: 200, width: 300,),
                                 ),
                                 AnimatedBuilder(
                                     animation: controller!
@@ -266,8 +282,13 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                               States[index] == 'Exercise'
                                                   ? 'Stop'
                                                   : 'Start';
-                                          playSound(
-                                              soundType, text, playerLong);
+                                          setState(() {
+                                            playerLong.pause();
+                                            if (soundType == 0 ||
+                                                soundType == 1)
+                                              playSound(
+                                                  soundType, text, playerLong);
+                                          });
 
                                           playerLong
                                               .seek(Duration(milliseconds: 0));
@@ -341,63 +362,20 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                   ),
                 ),
                 Container(
-                  width: double.infinity,
-                  child: Stack(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 150,
-                            height: 150,
-                            padding: EdgeInsets.all(32.0),
-                            child: FloatingActionButton(
-                                heroTag: 'Exercise Guide',
-                                elevation: 4.0,
-                                backgroundColor: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: AnimatedBuilder(
-                                    animation: controller!,
-                                    builder:
-                                        (BuildContext context, Widget? child) {
-                                      return new Icon(
-                                        controller!.isAnimating
-                                            ? Icons.pause
-                                            : Icons.play_arrow,
-                                        size: 40.0,
-                                        color: TimerColors[index],
-                                      );
-                                    },
-                                  ),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    first = true;
-                                    if (index == States.length) dispose();
-                                    if (controller!.isAnimating)
-                                      controller!.stop();
-                                    else {
-                                      controller!.reverse(
-                                          from: controller!.value == 0.0
-                                              ? 1.0
-                                              : controller!.value);
-                                    }
-                                  });
-                                }),
-                          ),
-                        ],
-                      ),
                       Container(
-                        width: 150,
-                        height: 150,
-                        padding: EdgeInsets.all(32.0),
-                        alignment: FractionalOffset.centerRight,
+                        width: 50,
+                        height: 50,
+                        margin: EdgeInsets.all(12),
                         child: Visibility(
                           visible: States[index] != 'Ready' &&
                               States[index] != 'Time to change Rep' &&
                               States[index] != 'Rest',
                           child: FloatingActionButton(
+                            heroTag: 'Exercise Guide',
                             backgroundColor: Themes.exerciseIconMain,
                             onPressed: () {
                               setState(() {
@@ -431,30 +409,116 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                           ),
                         ),
                       ),
+                      Container(
+                        width: 150,
+                        height: 150,
+                        padding: EdgeInsets.all(32.0),
+                        child: FloatingActionButton(
+                            heroTag: 'Play and Pause',
+                            elevation: 4.0,
+                            backgroundColor: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: AnimatedBuilder(
+                                animation: controller!,
+                                builder: (BuildContext context, Widget? child) {
+                                  return new Icon(
+                                    controller!.isAnimating
+                                        ? Icons.pause
+                                        : Icons.play_arrow,
+                                    size: 40.0,
+                                    color: TimerColors[index],
+                                  );
+                                },
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                first = true;
+                                if (controller!.isAnimating)
+                                  controller!.stop();
+                                else {
+                                  controller!.reverse(
+                                      from: controller!.value == 0.0
+                                          ? 1.0
+                                          : controller!.value);
+                                }
+                              });
+                            }),
+                      ),
+                      Visibility(
+                        visible: Hive.box('settings').get('soundType') == 0 ||
+                            Hive.box('settings').get('soundType') == 1,
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          margin: EdgeInsets.all(12),
+                          child: FloatingActionButton(
+                            heroTag: 'Turn on or off the volume',
+                            backgroundColor: TimerColors[index],
+                            onPressed: () {
+                              setState(() {
+                                if (soundType != 2) {
+                                  soundType = 2;
+                                } else {
+                                  soundType =
+                                      Hive.box('settings').get('soundType');
+                                }
+                              });
+                            },
+                            child: soundType != 2
+                                ? Icon(Icons.volume_up)
+                                : Icon(Icons.volume_off),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 Visibility(
-                  visible: currentState == 'Rest',
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        //controller!.stop();
-                        controller = AnimationController(
-                            vsync: this,
-                            duration: Duration(
-                                seconds: (controller!.value *
-                                            controller!.duration!.inSeconds +
-                                        15)
-                                    .round()));
-                        controller!.reverse(from: 1.0);
-                      });
-                    },
-                    child: Text(
-                      'Thêm 15 giây nghỉ',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                  visible: currentState == 'Rest' || currentState == 'Ready',
+                  child: currentState == 'Rest'
+                      ? InkWell(
+                          onTap: () {
+                            setState(() {
+                              //controller!.stop();
+                              controller = AnimationController(
+                                  vsync: this,
+                                  duration: Duration(
+                                      seconds: (controller!.value *
+                                                  controller!
+                                                      .duration!.inSeconds +
+                                              15)
+                                          .round()));
+                              controller!.reverse(from: 1.0);
+                            });
+                          },
+                          child: Text(
+                            'Thêm 15 giây nghỉ',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            setState(() {
+                              first = true;
+                              action();
+                              print(States[index]);
+                              controller = AnimationController(
+                                  vsync: this,
+                                  duration: Duration(
+                                      seconds: counterSeconds +
+                                          counterMinutes * 60));
+                              controller!.reverse(from: 1.0);
+                              playerLong.seek(Duration(seconds: 0));
+                              playSound(soundType, 'Start', playerLong);
+                            });
+                          },
+                          child: Text(
+                            'Bắt đầu luôn',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                 )
               ],
             ),

@@ -55,18 +55,17 @@ class _ExerciseMainState extends State<ExerciseMain>
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addObserver(LifecycleEventHandler(
-        inactiveCallBack: () async {
-          setState(() {
-            if (controller != null && Hive.box('settings').get('isPaused') == true) controller!.stop();
-          });
-        },
-        detachedCallBack: () async {
-          print('detached...');
-        },
-        resumeCallBack: () async {
-          print('resume...');
-        }));
+    WidgetsBinding.instance!
+        .addObserver(LifecycleEventHandler(inactiveCallBack: () async {
+      setState(() {
+        if (controller != null && Hive.box('settings').get('isPaused') == true)
+          controller!.stop();
+      });
+    }, detachedCallBack: () async {
+      print('detached...');
+    }, resumeCallBack: () async {
+      print('resume...');
+    }));
 
     soundType = Hive.box('settings').get('soundType');
     timeStart = DateTime.now();
@@ -100,6 +99,8 @@ class _ExerciseMainState extends State<ExerciseMain>
         vsync: this,
         duration: Duration(seconds: counterSeconds + counterMinutes * 60));
     States.add('Ready');
+    currentState = 'Ready';
+    index = 0;
     Time.add(10);
     TimerColors.add(Color.fromRGBO(252, 182, 8, 1.0));
     BorderColors.add(Themes.readyTimerBorder);
@@ -210,14 +211,19 @@ class _ExerciseMainState extends State<ExerciseMain>
                               builder: (BuildContext context, Widget? child) {
                                 print('timerString = ' + timerString);
                                 if (timerString == '00:02') {
-                                  playSound(
-                                      soundType, 'three', playerShort2Sec);
+                                  if (soundType == 0 || soundType == 1)
+                                    playSound(
+                                        soundType, 'three', playerShort2Sec);
                                 }
                                 if (timerString == '00:01') {
-                                  playSound(soundType, 'two', playerShort1Sec);
+                                  if (soundType == 0 || soundType == 1)
+                                    playSound(
+                                        soundType, 'two', playerShort1Sec);
                                 }
                                 if (timerString == '00:00') {
-                                  playSound(soundType, 'one', playerShort0Sec);
+                                  if (soundType == 0 || soundType == 1)
+                                    playSound(
+                                        soundType, 'one', playerShort0Sec);
                                 }
                                 return new CustomPaint(
                                   painter: TimerPainter(
@@ -235,10 +241,32 @@ class _ExerciseMainState extends State<ExerciseMain>
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  first != true ? 'Ready' : currentState,
-                                  style: TextStyle(
-                                      fontSize: 30, color: Colors.white),
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      first != true ? 'Ready' : currentState,
+                                      style: TextStyle(
+                                          fontSize: 30, color: Colors.white),
+                                    ),
+                                    Visibility(
+                                      visible: index % 2 == 1,
+                                      child: Container(
+                                        padding: EdgeInsets.only(top: 16),
+                                        child: Text(
+                                          ((index + 1) ~/ 2).toString() +
+                                              "/" +
+                                              (numberOfExercises *
+                                                      numberOfRepetitions)
+                                                  .toString(),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 AnimatedBuilder(
                                     animation: controller!
@@ -254,8 +282,13 @@ class _ExerciseMainState extends State<ExerciseMain>
                                               States[index] == 'Exercise'
                                                   ? 'Stop'
                                                   : 'Start';
-                                          playSound(
-                                              soundType, text, playerLong);
+                                          setState(() {
+                                            playerLong.pause();
+                                            if (soundType == 0 ||
+                                                soundType == 1)
+                                              playSound(
+                                                  soundType, text, playerLong);
+                                          });
 
                                           playerLong
                                               .seek(Duration(milliseconds: 0));
@@ -333,63 +366,127 @@ class _ExerciseMainState extends State<ExerciseMain>
                   ),
                 ),
                 Container(
-                  width: 150,
-                  height: 150,
-                  padding: EdgeInsets.all(32.0),
-                  child: FloatingActionButton(
-                      elevation: 4.0,
-                      backgroundColor: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: AnimatedBuilder(
-                          animation: controller!,
-                          builder: (BuildContext context, Widget? child) {
-                            return new Icon(
-                              controller!.isAnimating
-                                  ? Icons.pause
-                                  : Icons.play_arrow,
-                              size: 40.0,
-                              color: TimerColors[index],
-                            );
-                          },
-                        ),
+                  width: double.infinity,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        margin: EdgeInsets.all(12),
+                        child: Visibility(visible: false, child: FloatingActionButton(onPressed: () {},)),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          first = true;
-                          if (index == States.length) dispose();
-                          if (controller!.isAnimating)
-                            controller!.stop(canceled: true);
-                          else {
-                            controller!.reverse(
-                                from: controller!.value == 0.0
-                                    ? 1.0
-                                    : controller!.value);
-                          }
-                        });
-                      }),
+                      Container(
+                        width: 150,
+                        height: 150,
+                        padding: EdgeInsets.all(32.0),
+                        child: FloatingActionButton(
+                            heroTag: 'Play and Pause',
+                            elevation: 4.0,
+                            backgroundColor: Colors.white,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: AnimatedBuilder(
+                                animation: controller!,
+                                builder: (BuildContext context, Widget? child) {
+                                  return new Icon(
+                                    controller!.isAnimating
+                                        ? Icons.pause
+                                        : Icons.play_arrow,
+                                    size: 40.0,
+                                    color: TimerColors[index],
+                                  );
+                                },
+                              ),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                first = true;
+                                if (index == States.length) dispose();
+                                if (controller!.isAnimating)
+                                  controller!.stop();
+                                else {
+                                  controller!.reverse(
+                                      from: controller!.value == 0.0
+                                          ? 1.0
+                                          : controller!.value);
+                                }
+                              });
+                            }),
+                      ),
+                      Visibility(
+                        visible: Hive.box('settings').get('soundType') == 0 ||
+                            Hive.box('settings').get('soundType') == 1,
+                        child: Container(
+                            width: 50,
+                            height: 50,
+                            margin: EdgeInsets.all(12.0),
+                            child: FloatingActionButton(
+                              heroTag: 'Turn on or off the volume',
+                              backgroundColor: TimerColors[index],
+                              onPressed: () {
+                                setState(() {
+                                  if (soundType != 2) {
+                                    soundType = 2;
+                                  } else {
+                                    soundType =
+                                        Hive.box('settings').get('soundType');
+                                  }
+                                });
+                              },
+                              child: soundType != 2
+                                  ? Icon(Icons.volume_up)
+                                  : Icon(Icons.volume_off),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
                 Visibility(
-                  visible: currentState == 'Rest',
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        controller!.stop();
-                        controller = AnimationController(
-                            vsync: this,
-                            duration: Duration(
-                                seconds: (controller!.value *
-                                            controller!.duration!.inSeconds +
-                                        15)
-                                    .round()));
-                        controller!.reverse(from: 1.0);
-                      });
-                    },
-                    child: Text(
-                      'Thêm 15 giây nghỉ',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                  visible: currentState == 'Rest' || currentState == 'Ready',
+                  child: currentState == 'Rest'
+                      ? InkWell(
+                          onTap: () {
+                            setState(() {
+                              controller = AnimationController(
+                                  vsync: this,
+                                  duration: Duration(
+                                      seconds: (controller!.value *
+                                                  controller!
+                                                      .duration!.inSeconds +
+                                              15)
+                                          .round()));
+                              controller!.reverse(from: 1.0);
+                            });
+                          },
+                          child: Text(
+                            'Thêm 15 giây nghỉ',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            setState(() {
+                              first = true;
+                              action();
+                              print(States[index]);
+                              controller = AnimationController(
+                                  vsync: this,
+                                  duration: Duration(
+                                      seconds: counterSeconds +
+                                          counterMinutes * 60));
+                              controller!.reverse(from: 1.0);
+                              playerLong.seek(Duration(seconds: 0));
+                              playSound(soundType, 'Start', playerLong);
+                            });
+                          },
+                          child: Text(
+                            'Bắt đầu luôn',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                 )
               ],
             ),
