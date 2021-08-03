@@ -1,8 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
+import 'package:my_first_flutter_app/constants/notifications-manager.dart';
+import 'package:my_first_flutter_app/model/remindTime.dart';
 import '../history.dart';
 
 class CongratulationPage extends StatefulWidget {
@@ -14,6 +15,7 @@ class CongratulationPage extends StatefulWidget {
 
 class _CongratulationPageState extends State<CongratulationPage> {
   var hiveBox = Hive.box('savedData');
+  var hiveBoxTime = Hive.box('timeReminded');
 
   bool notificationEnabled = false;
   int numberConsecutiveDate = 1;
@@ -31,16 +33,16 @@ class _CongratulationPageState extends State<CongratulationPage> {
           break;
       }
       print(daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date)
-          .toString() +
+              .toString() +
           "?");
       if (daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date).abs() <=
           1) {
         print(daysBetween(hiveBox.getAt(i - 1).date,
-            hiveBox.getAt(i).date.subtract(Duration(days: 1)))
-            .toString() +
+                    hiveBox.getAt(i).date.subtract(Duration(days: 1)))
+                .toString() +
             "!!");
         if (daysBetween(hiveBox.getAt(i).date.subtract(Duration(days: 1)),
-            hiveBox.getAt(i - 1).date) ==
+                hiveBox.getAt(i - 1).date) ==
             0) {
           setState(() {
             numberConsecutiveDate += 1;
@@ -55,7 +57,6 @@ class _CongratulationPageState extends State<CongratulationPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -116,7 +117,11 @@ class _CongratulationPageState extends State<CongratulationPage> {
                           Themes.restThemeMain,
                           Themes.restIconMain,
                           'Tổng bài tập đã hoàn tất',
-                          (hiveBox.getAt(hiveBox.length - 1).numberExercise * hiveBox.getAt(hiveBox.length - 1).numberRepetitions).toString(),
+                          (hiveBox.getAt(hiveBox.length - 1).numberExercise *
+                                  hiveBox
+                                      .getAt(hiveBox.length - 1)
+                                      .numberRepetitions)
+                              .toString(),
                           Icons.directions_run),
                       componentInfo(
                           Themes.numberRepetitionsThemeMain,
@@ -146,6 +151,15 @@ class _CongratulationPageState extends State<CongratulationPage> {
                           onChanged: (value) {
                             setState(() {
                               notificationEnabled = value;
+                              if(value == true){
+                                DateTime dateTime = hiveBox.getAt(hiveBox.length - 1).date;
+                                showMessage('Thông báo đang được đặt hàng ngày, lúc ' +
+                                    dateTime.hour.toString() +
+                                    ":" +
+                                    dateTime.minute.toString());
+                              } else {
+                                showMessage('Thông báo sẽ được giữ nguyên như cũ');
+                              }
                             });
                           },
                           activeColor: Colors.pinkAccent,
@@ -168,6 +182,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                         ),
                         child: InkWell(
                           onTap: () {
+                            changeSetting();
                             Navigator.pop(context);
                             Navigator.pushNamed(context, History.id);
                           },
@@ -191,6 +206,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                         ),
                         child: InkWell(
                           onTap: () {
+                            changeSetting();
                             Navigator.pop(context);
                           },
                           child: Center(
@@ -251,5 +267,39 @@ class _CongratulationPageState extends State<CongratulationPage> {
     from = DateTime(from.year, from.month, from.day);
     to = DateTime(to.year, to.month, to.day);
     return (to.difference(from).inHours / 24).round();
+  }
+
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void changeSetting() {
+    DateTime dateTime = hiveBox.getAt(hiveBox.length - 1).date;
+
+    if (notificationEnabled == true) {
+      if (hiveBoxTime.isEmpty) {
+        addNotification(dateTime.hour, dateTime.minute);
+      } else {
+        replaceNotification(
+            dateTime.hour, dateTime.minute);
+      }
+    }
+  }
+
+  void addNotification(int hour, int minute) {
+    hiveBoxTime.add(RemindTime(hour, minute));
+    NotificationsManager notificationManager = NotificationsManager.init();
+    notificationManager.showNotificationOneTime(hour, minute);
+  }
+
+  void replaceNotification(int hour, int minute) {
+    hiveBoxTime.deleteAt(0);
+    hiveBoxTime.add(RemindTime(hour, minute));
+
+    NotificationsManager notificationManager = NotificationsManager.init();
+    cancelAllNotification();
+    notificationManager.showNotificationOneTime(hour, minute);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
+import 'package:my_first_flutter_app/constants/lifecycle-event-handler.dart';
 import 'package:my_first_flutter_app/model/exerciseData.dart';
 import 'package:my_first_flutter_app/model/savedData.dart';
 import 'package:my_first_flutter_app/screens/custom-exercise/custom-exercise.dart';
@@ -32,6 +33,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
   int index = 0;
   bool first = false;
   int soundType = 0;
+  DateTime timeStart = DateTime.now();
 
   final playerShort2Sec = AudioPlayer();
   final playerShort1Sec = AudioPlayer();
@@ -43,10 +45,24 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
     Duration duration = controller!.duration! * (controller!.value);
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
+  int exercises = 0, repetitions = 0;
 
   @override
   void initState() {
+    WidgetsBinding.instance!
+        .addObserver(LifecycleEventHandler(inactiveCallBack: () async {
+      setState(() {
+        if (controller != null && Hive.box('settings').get('isPaused') == true)
+          controller!.stop();
+      });
+    }, detachedCallBack: () async {
+      print('detached...');
+    }, resumeCallBack: () async {
+      print('resume...');
+    }));
+
     soundType = Hive.box('settings').get('soundType');
+    timeStart = DateTime.now();
 
     flutterTts.awaitSpeakCompletion(true);
     flutterTts.setLanguage("en-US");
@@ -69,8 +85,8 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
     controller = AnimationController(
         vsync: this,
         duration: Duration(seconds: counterSeconds + counterMinutes * 60));
-    int repetitions = int.parse(numberRepetitions);
-    int exercises = int.parse(numberExercises);
+    repetitions = int.parse(numberRepetitions);
+    exercises = int.parse(numberExercises);
     States.add('Ready');
     Time.add(10);
     TimerColors.add(Color.fromRGBO(252, 182, 8, 1.0));
@@ -234,6 +250,14 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                   style: TextStyle(
                                       fontSize: 30, color: Colors.white),
                                 ),
+                                Visibility(
+                                  visible: index % 2 == 1,
+                                  child: Text(
+                                    ((index + 1) ~/ 2).toString() + "/" +
+                                        (exercises * repetitions).toString(),
+                                    style: TextStyle(color: Colors.white, fontSize: 20),
+                                  ),
+                                ),
                                 AnimatedBuilder(
                                     animation: controller!
                                       ..addStatusListener((status) {
@@ -269,9 +293,11 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                               }
                                               var hiveBox =
                                                   Hive.box('savedData');
+                                              print(
+                                                  "******************** $timeStart ********************");
                                               hiveBox.add(SavedData(
                                                   totalDuration,
-                                                  DateTime.now(),
+                                                  timeStart,
                                                   true,
                                                   -1,
                                                   -1,
@@ -326,6 +352,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                             height: 150,
                             padding: EdgeInsets.all(32.0),
                             child: FloatingActionButton(
+                                heroTag: 'Exercise Guide',
                                 elevation: 4.0,
                                 backgroundColor: Colors.white,
                                 child: Padding(
@@ -371,6 +398,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                               States[index] != 'Time to change Rep' &&
                               States[index] != 'Rest',
                           child: FloatingActionButton(
+                            backgroundColor: Themes.exerciseIconMain,
                             onPressed: () {
                               setState(() {
                                 if (controller!.isAnimating) controller!.stop();

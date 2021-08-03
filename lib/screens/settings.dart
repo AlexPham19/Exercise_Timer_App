@@ -1,31 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive/hive.dart';
-import 'package:my_first_flutter_app/screens/promotions.dart';
-import 'package:my_first_flutter_app/screens/try-premium.dart';
+import 'package:my_first_flutter_app/constants/notifications-manager.dart';
+import 'package:my_first_flutter_app/model/remindTime.dart';
 import 'package:my_first_flutter_app/widgets/drawer.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/widgets/main-app-bar-with-drawer.dart';
 
 class Settings extends StatefulWidget {
-
   @override
   _SettingsState createState() => _SettingsState();
 }
-int soundType = Hive.box('settings').get('soundType'); // 0 la giong noi, 1 la am thanh, con lai la tat
+
+int soundType = Hive.box('settings')
+    .get('soundType'); // 0 la giong noi, 1 la am thanh, con lai la tat
+
 class _SettingsState extends State<Settings> {
   var hiveBox = Hive.box('settings');
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var hiveBoxData = Hive.box('savedData');
+  var hiveBoxTime = Hive.box('timeReminded');
+
   bool isReminded = false;
   bool isPaused = false;
   bool isSoundOn = false;
+  String timeReminded = '';
 
   @override
   void initState() {
+    timeReminded = hiveBoxTime.isNotEmpty ? '(' + hiveBoxTime
+        .getAt(0)
+        .hour
+        .toString()
+        .padLeft(2, '0') + ":" + hiveBoxTime
+        .getAt(0)
+        .minute
+        .toString()
+        .padLeft(2, '0') + ")" : '';
+    isPaused = hiveBox.get('isPaused');
+    isReminded = hiveBoxData.isNotEmpty && hiveBoxTime.isNotEmpty;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +52,10 @@ class _SettingsState extends State<Settings> {
       ),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
-        child: MainAppBar(title: 'Settings', scaffoldKey: _scaffoldKey,),
+        child: MainAppBar(
+          title: 'Settings',
+          scaffoldKey: _scaffoldKey,
+        ),
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -50,10 +70,8 @@ class _SettingsState extends State<Settings> {
                       padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Exercise Guide Sounds",
-                          style: Themes.textOptions
-                        ),
+                        child: Text("Exercise Guide Sounds",
+                            style: Themes.textOptions),
                       ),
                     ),
                     ToggleButtons(
@@ -67,13 +85,9 @@ class _SettingsState extends State<Settings> {
                       borderRadius: BorderRadius.circular(15.0),
                       onPressed: (int index) {
                         setState(() {
-                          if(index == 0){
-                            ScaffoldMessenger.of(context)
-                              ..removeCurrentSnackBar()
-                              ..showSnackBar(SnackBar(
-                                  content: Text('Tính năng đang được phát triển!')));
-                          }
-                          else{
+                          if (index == 0) {
+                            showMessage('Tính năng đang được phát triển!');
+                          } else {
                             soundType = index;
                             hiveBox.put('soundType', soundType);
                             print(hiveBox.get('soundType'));
@@ -122,7 +136,8 @@ class _SettingsState extends State<Settings> {
                             padding: EdgeInsets.symmetric(vertical: 8.0),
                             width: 300,
                             child: Text(
-                              'Cùng thời gian trong ngày như lần luyện tập trước của bạn',
+                              'Cùng thời gian trong ngày như lần luyện tập trước của bạn ' +
+                                  timeReminded,
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w300),
                             ),
@@ -133,13 +148,31 @@ class _SettingsState extends State<Settings> {
                     Container(
                       child: CupertinoSwitch(
                         value: isReminded,
-                        onChanged: (value) {
+                        onChanged: (value) async {
                           setState(() {
-                            ScaffoldMessenger.of(context)
-                              ..removeCurrentSnackBar()
-                              ..showSnackBar(SnackBar(
-                                  content: Text('Tính năng đang được phát triển!')));
-                            //isReminded = value;
+                            if (value == true && hiveBoxData.isNotEmpty) {
+                              DateTime dateTime = hiveBoxData
+                                  .getAt(hiveBoxData.length - 1)
+                                  .date;
+                              isReminded = value;
+                              if (hiveBoxTime.isEmpty) {
+                                addNotification(dateTime.hour, dateTime.minute);
+                              } else {
+                                replaceNotification(
+                                    dateTime.hour, dateTime.minute);
+                              }
+                              showMessage(
+                                  'Thông báo đang được đặt hàng ngày, lúc ' +
+                                      dateTime.hour.toString() +
+                                      ":" +
+                                      dateTime.minute.toString());
+                            } else if (value == true && hiveBoxData.isEmpty) {
+                              showMessage('Chưa có dữ liệu!');
+                            } else {
+                              isReminded = value;
+                              showMessage('Đã tắt thông báo!');
+                              deleteNotification();
+                            }
                           });
                         },
                         activeColor: Colors.pinkAccent,
@@ -163,11 +196,16 @@ class _SettingsState extends State<Settings> {
                         value: isPaused,
                         onChanged: (value) {
                           setState(() {
-                            ScaffoldMessenger.of(context)
-                              ..removeCurrentSnackBar()
-                              ..showSnackBar(SnackBar(
-                                  content: Text('Tính năng đang được phát triển!')));
-                            //isPaused = value;
+                            //showMessage('Tính năng đang được phát triển!');
+                            isPaused = value;
+                            hiveBox.put('isPaused', value);
+                            if (value == true) {
+                              showMessage(
+                                  'Ứng dụng sẽ tạm dừng ngay khi bạn dừng ứng dụng');
+                            } else {
+                              showMessage(
+                                  'Ứng dụng tự động dừng khi kết thúc hiệp (nghỉ hoặc tập)');
+                            }
                           });
                         },
                         activeColor: Colors.pinkAccent,
@@ -192,10 +230,7 @@ class _SettingsState extends State<Settings> {
                         value: isSoundOn,
                         onChanged: (value) {
                           setState(() {
-                            ScaffoldMessenger.of(context)
-                              ..removeCurrentSnackBar()
-                              ..showSnackBar(SnackBar(
-                                  content: Text('Tính năng đang được phát triển!')));
+                            showMessage('Tính năng đang được phát triển!');
                             //isSoundOn = value;
                           });
                         },
@@ -206,7 +241,7 @@ class _SettingsState extends State<Settings> {
                 ),
               ),
 
-    //  ----------------------------- CÒN NHỮNG THỨ DƯỚI THÌ CHƯA CẦN THIẾT ----------------------- //
+              //  ----------------------------- CÒN NHỮNG THỨ DƯỚI THÌ CHƯA CẦN THIẾT ----------------------- //
               // InkWell(
               //   child: Container(
               //     padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -265,4 +300,30 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
+
+  void addNotification(int hour, int minute) {
+    hiveBoxTime.add(RemindTime(hour, minute));
+    NotificationsManager notificationManager = NotificationsManager.init();
+    notificationManager.showNotificationOneTime(hour, minute);
+  }
+
+  void replaceNotification(int hour, int minute) {
+    hiveBoxTime.deleteAt(0);
+    hiveBoxTime.add(RemindTime(hour, minute));
+
+    NotificationsManager notificationManager = NotificationsManager.init();
+    cancelAllNotification();
+    notificationManager.showNotificationOneTime(hour, minute);
+  }
+
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
+  }
+}
+
+void deleteNotification() {
+  Hive.box('timeReminded').deleteAt(0);
+  cancelAllNotification();
 }
