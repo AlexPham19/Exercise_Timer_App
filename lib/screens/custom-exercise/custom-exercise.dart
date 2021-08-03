@@ -313,12 +313,22 @@ class _CustomExerciseState extends State<CustomExercise> {
   }
 
   void addToList() {
+    String imgUrl = '';
+    for(int i = 0; i < allPossibleExercise.length; i++){
+      if(allPossibleExercise[i].name == controllerName.text.toString()){
+        setState(() {
+          imgUrl = allPossibleExercise[i].imgUrl;
+        });
+        break;
+      }
+    }
     listCustomExercise.add(new ExerciseData(
       controllerName.text.toString(),
       int.parse(controllerExerciseMinutes.text.toString()) * 60 +
           int.parse(controllerExerciseSeconds.text.toString()),
       int.parse(controllerRestMinutes.text.toString()) * 60 +
           int.parse(controllerRestSeconds.text.toString()),
+      imgUrl,
     ));
   }
 

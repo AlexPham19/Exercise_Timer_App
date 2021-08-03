@@ -44,4 +44,5 @@ flutter:
     - assets/icon/
     - assets/data/
     - assets/audio/
+    - assets/gif/
   uses-material-design: true

@@ -23,6 +23,12 @@ class _HistoryState extends State<History> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    Hive.openBox('savedData');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
@@ -87,109 +93,106 @@ class _HistoryState extends State<History> {
                     );
                   else
                     showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                title: Text(
-                                  data.date.day.toString() +
-                                      " tháng " +
-                                      data.date.month.toString() +
-                                      ' ' +
-                                      data.date.year.toString() +
-                                      ' ' +
-                                      data.date.hour.toString() +
-                                      ":" +
-                                      data.date.minute.toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                ),
+                      context: context,
+                      builder: (context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              title: Text(
+                                data.date.day.toString() +
+                                    " tháng " +
+                                    data.date.month.toString() +
+                                    ' ' +
+                                    data.date.year.toString() +
+                                    ' ' +
+                                    data.date.hour.toString() +
+                                    ":" +
+                                    data.date.minute.toString(),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500),
                               ),
-                              ListTile(
-                                //leading: new Icon(Icons.photo),
-                                title: new Text('Use this setting'),
-                                onTap: () {
-                                  if (hiveBox.getAt(index).isCustom == true) {
-                                    ScaffoldMessenger.of(context)
-                                      ..removeCurrentSnackBar()
-                                      ..showSnackBar(SnackBar(
-                                          content: Text(
-                                              'This setting could not be used, as this workout is a custom one')));
-                                  } else {
-                                    setState(() {
-                                      NumberOfExercises =
-                                          data.numberExercise.toString();
-                                      NumberOfRepetitions =
-                                          data.numberRepetitions.toString();
-                                      SecondsRest = (data.restTime % 60)
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      MinutesRest = (data.restTime ~/ 60)
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      SecondsExercise = (data.exerciseTime % 60)
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      MinutesExercise =
-                                          (data.exerciseTime ~/ 60)
-                                              .toString()
-                                              .padLeft(2, '0');
-                                      MinutesToRepeat =
-                                          (data.changeRepTime ~/ 60)
-                                              .toString()
-                                              .padLeft(2, '0');
-                                      SecondsToRepeat =
-                                          (data.changeRepTime % 60)
-                                              .toString()
-                                              .padLeft(2, '0');
-                                      int duration = data.exerciseTime *
-                                              data.numberExercise *
-                                              data.numberRepetitions +
-                                          data.restTime *
-                                              data.numberRepetitions *
-                                              (data.numberExercise - 1) +
-                                          data.changeRepTime *
-                                              (data.numberRepetitions - 1);
-                                      MinutesTotal = (duration ~/ 60)
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      SecondsTotal = (duration % 60)
-                                          .toString()
-                                          .padLeft(2, '0');
-                                      // Còn thời gian để lặp lại nữa
-                                    });
-                                  }
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              ListTile(
-                                //leading: new Icon(Icons.music_note),
-                                title: new Text('Delete Workout'),
-                                onTap: () {
+                            ),
+                            ListTile(
+                              //leading: new Icon(Icons.photo),
+                              title: new Text('Use this setting'),
+                              onTap: () {
+                                if (hiveBox.getAt(index).isCustom == true) {
+                                  ScaffoldMessenger.of(context)
+                                    ..removeCurrentSnackBar()
+                                    ..showSnackBar(SnackBar(
+                                        content: Text(
+                                            'This setting could not be used, as this workout is a custom one')));
+                                } else {
                                   setState(() {
-                                    // if the user delete the workout that was set to notify daily
+                                    NumberOfExercises =
+                                        data.numberExercise.toString();
+                                    NumberOfRepetitions =
+                                        data.numberRepetitions.toString();
+                                    SecondsRest = (data.restTime % 60)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    MinutesRest = (data.restTime ~/ 60)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    SecondsExercise = (data.exerciseTime % 60)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    MinutesExercise = (data.exerciseTime ~/ 60)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    MinutesToRepeat = (data.changeRepTime ~/ 60)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    SecondsToRepeat = (data.changeRepTime % 60)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    int duration = data.exerciseTime *
+                                            data.numberExercise *
+                                            data.numberRepetitions +
+                                        data.restTime *
+                                            data.numberRepetitions *
+                                            (data.numberExercise - 1) +
+                                        data.changeRepTime *
+                                            (data.numberRepetitions - 1);
+                                    MinutesTotal = (duration ~/ 60)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    SecondsTotal = (duration % 60)
+                                        .toString()
+                                        .padLeft(2, '0');
+                                    // Còn thời gian để lặp lại nữa
+                                  });
+                                }
+                                Navigator.pop(context);
+                              },
+                            ),
+                            ListTile(
+                              //leading: new Icon(Icons.music_note),
+                              title: new Text('Delete Workout'),
+                              onTap: () {
+                                setState(() {
+                                  var hiveBoxTime = Hive.box('timeReminded');
+                                  // if the user delete the workout that was set to notify daily
+                                  if (hiveBoxTime.isNotEmpty) {
                                     if (hiveBox.getAt(index).date.minute ==
-                                            Hive.box('remindedTime')
-                                                .getAt(0)
-                                                .minute &&
+                                            hiveBoxTime.getAt(0).minute &&
                                         hiveBox.getAt(index).date.minute ==
-                                            Hive.box('remindedTime')
-                                                .getAt(0)
-                                                .minute) {
+                                            hiveBoxTime.getAt(0).minute) {
                                       deleteNotification();
                                     }
-                                    hiveBox.deleteAt(index);
-                                  });
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                        });
+                                  }
+                                  hiveBox.deleteAt(index);
+                                });
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
                 },
                 child: Column(
                   children: [
