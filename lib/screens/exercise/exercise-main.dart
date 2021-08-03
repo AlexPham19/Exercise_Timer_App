@@ -6,6 +6,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
+import 'package:my_first_flutter_app/constants/lifecycle-event-handler.dart';
 import 'package:my_first_flutter_app/model/savedData.dart';
 import 'package:my_first_flutter_app/screens/welcome/welcome.dart';
 
@@ -38,6 +39,7 @@ class _ExerciseMainState extends State<ExerciseMain>
   bool first = false;
   AnimationController? controller;
   int soundType = 0;
+  DateTime timeStart = DateTime.now();
 
   final playerShort2Sec = AudioPlayer();
   final playerShort1Sec = AudioPlayer();
@@ -53,7 +55,21 @@ class _ExerciseMainState extends State<ExerciseMain>
 
   @override
   void initState() {
+    WidgetsBinding.instance!.addObserver(LifecycleEventHandler(
+        inactiveCallBack: () async {
+          setState(() {
+            if (controller != null && Hive.box('settings').get('isPaused') == true) controller!.stop();
+          });
+        },
+        detachedCallBack: () async {
+          print('detached...');
+        },
+        resumeCallBack: () async {
+          print('resume...');
+        }));
+
     soundType = Hive.box('settings').get('soundType');
+    timeStart = DateTime.now();
 
     flutterTts.awaitSpeakCompletion(true);
     flutterTts.setLanguage("en-US");
@@ -194,7 +210,8 @@ class _ExerciseMainState extends State<ExerciseMain>
                               builder: (BuildContext context, Widget? child) {
                                 print('timerString = ' + timerString);
                                 if (timerString == '00:02') {
-                                  playSound(soundType, 'three', playerShort2Sec);
+                                  playSound(
+                                      soundType, 'three', playerShort2Sec);
                                 }
                                 if (timerString == '00:01') {
                                   playSound(soundType, 'two', playerShort1Sec);
@@ -226,7 +243,7 @@ class _ExerciseMainState extends State<ExerciseMain>
                                 AnimatedBuilder(
                                     animation: controller!
                                       ..addStatusListener((status) {
-                                        if(timerString == '00:08'){
+                                        if (timerString == '00:08') {
                                           setState(() {
                                             print("HOW");
                                           });
@@ -237,7 +254,8 @@ class _ExerciseMainState extends State<ExerciseMain>
                                               States[index] == 'Exercise'
                                                   ? 'Stop'
                                                   : 'Start';
-                                          playSound(soundType, text, playerLong);
+                                          playSound(
+                                              soundType, text, playerLong);
 
                                           playerLong
                                               .seek(Duration(milliseconds: 0));
@@ -263,7 +281,7 @@ class _ExerciseMainState extends State<ExerciseMain>
                                                           NumberOfExercises) *
                                                       int.parse(
                                                           NumberOfRepetitions),
-                                                  DateTime.now(),
+                                                  timeStart,
                                                   false,
                                                   int.parse(MinutesExercise *
                                                           60) +
@@ -367,7 +385,10 @@ class _ExerciseMainState extends State<ExerciseMain>
                         controller!.reverse(from: 1.0);
                       });
                     },
-                    child: Text('Thêm 15 giây nghỉ', style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      'Thêm 15 giây nghỉ',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 )
               ],
@@ -381,7 +402,6 @@ class _ExerciseMainState extends State<ExerciseMain>
   void playSound(int type, String text, AudioPlayer player) async {
     if (type == 0) {
       flutterTts.speak(text);
-
     } else if (type == 1) {
       player.play();
     }
