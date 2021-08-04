@@ -534,10 +534,8 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
         index += 1;
         counterMinutes = Time[index] ~/ 60;
         counterSeconds = Time[index] % 60;
-        CounterMinutes = counterMinutes.toString();
-        CounterSeconds = counterSeconds.toString();
-        if (counterMinutes < 10) CounterMinutes = '0' + CounterMinutes;
-        if (counterSeconds < 10) CounterSeconds = '0' + CounterSeconds;
+        CounterMinutes = counterMinutes.toString().padLeft(2, '0');
+        CounterSeconds = counterSeconds.toString().padLeft(2, '0');
         currentState = States[index];
       });
     }

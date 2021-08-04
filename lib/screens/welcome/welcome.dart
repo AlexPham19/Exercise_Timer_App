@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_material_pickers/helpers/show_number_picker.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/widgets/drawer.dart';
 import 'package:my_first_flutter_app/widgets/main-app-bar-with-drawer.dart';
@@ -51,15 +52,8 @@ class _WelcomePageState extends State<WelcomePage> {
           children: <Widget>[
             Container(
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: <Color>[Color(0xffFA5853), Color(0xffF42E52)],
-                  tileMode:
-                      TileMode.repeated, // repeats the gradient over the canvas
-                ),
+                color: Themes.appBarTheme,
               ),
-             // color: Themes.appBarTheme,
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Align(
                 alignment: Alignment.center,
@@ -166,172 +160,73 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Widget itemSetTime(IconData icon, Color color, Color iconColor, Color dialogThemeColor, String title,
-      String time, String minutes, String seconds) {
+  Widget itemSetTime(
+      IconData icon,
+      Color color,
+      Color iconColor,
+      Color dialogThemeColor,
+      String title,
+      String time,
+      String minutes,
+      String seconds) {
     return InkWell(
       onTap: () {
-        showDialog(
+        showMaterialNumberPicker(
+          backgroundColor: color,
+          headerColor: dialogThemeColor,
+          title: 'Seconds $title',
           context: context,
-          builder: (BuildContext context) {
-            TextEditingController _editingControllerMinutes =
-                new TextEditingController(text: minutes);
-            TextEditingController _editingControllerSeconds =
-                new TextEditingController(text: seconds);
-            return AlertDialog(
-              backgroundColor: dialogThemeColor,
-              actions: [
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      String min = _editingControllerMinutes.text.toString();
-                      String sec = _editingControllerSeconds.text.toString();
-                      if (int.parse(min) * 60 + int.parse(sec) >= 5 &&
-                          min != '' &&
-                          sec != '' &&
-                          int.parse(sec) < 60) {
-                        setState(() {
-                          switch (title) {
-                            case 'Exercise':
-                              MinutesExercise = min;
-                              SecondsExercise = sec;
-                              break;
-                            case 'Rest':
-                              MinutesRest = min;
-                              SecondsRest = sec;
-                              break;
-                            case 'Time to repeat':
-                              MinutesToRepeat = min;
-                              SecondsToRepeat = sec;
-                              break;
-                            default:
-                              {}
-                          }
-                          int minEx = int.parse(MinutesExercise);
-                          int secEx = int.parse(SecondsExercise);
-                          int minRest = int.parse(MinutesRest);
-                          int secRest = int.parse(SecondsRest);
-                          int numEx = int.parse(NumberOfExercises);
-                          int numRep = int.parse(NumberOfRepetitions);
-                          int minRep = int.parse(MinutesToRepeat);
-                          int secRep = int.parse(SecondsToRepeat);
-                          int secTotal = ((minEx * 60 + secEx) * numEx +
-                                  (minRest * 60 + secRest) * (numEx - 1)) *
-                              (numRep);
-                          if (numRep > 1) secTotal += (minRep * 60 + secRep);
-                          int minTotal = secTotal ~/ 60;
-                          secTotal = secTotal % 60;
-                          MinutesTotal = minTotal.toString();
-                          SecondsTotal = secTotal.toString();
-                          if (minTotal < 10) MinutesTotal = '0' + MinutesTotal;
-                          if (secTotal < 10) SecondsTotal = '0' + SecondsTotal;
-                          print(MinutesToRepeat);
-                          print(SecondsToRepeat);
-                        });
-                        Navigator.pop(context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      elevation: 8.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'OK',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-              content: Container(
-                child: Column(
-                  children: [
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 32),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.play_circle_outline,
-                                color: Colors.white, size: 30.0),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                title,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 30,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          height: 60.0,
-                          width: 50.0,
-                          child: TextField(
-                            maxLength: 2,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              counterText: '',
-                            ),
-                            style: TextStyle(
-                              fontSize: 40.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            cursorColor: Colors.white,
-                            cursorHeight: 60.0,
-                            autofocus: true,
-                            controller: _editingControllerMinutes,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            ':',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 40.0,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                        Container(
-                          height: 60.0,
-                          width: 50.0,
-                          child: TextField(
-                            maxLength: 2,
-                            keyboardType: TextInputType.number,
-                            style: TextStyle(
-                              fontSize: 40.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            decoration: InputDecoration(
-                              counterText: '',
-                            ),
-                            cursorColor: Colors.white,
-                            autofocus: true,
-                            controller: _editingControllerSeconds,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+          minNumber: 0,
+          maxNumber: 59 * 60 + 59,
+          onChanged: (value) => setState(() {
+            String min = (value ~/ 60).toString();
+            String sec = (value % 60).toString();
+            if (int.parse(min) * 60 + int.parse(sec) >= 5 &&
+                min != '' &&
+                sec != '' &&
+                int.parse(sec) < 60) {
+              switch (title) {
+                case 'Exercise':
+                  MinutesExercise = min.padLeft(2, '0');
+                  SecondsExercise = sec.padLeft(2, '0');
+                  break;
+                case 'Rest':
+                  MinutesRest = min.padLeft(2, '0');
+                  SecondsRest = sec.padLeft(2, '0');
+                  break;
+                case 'Time to repeat':
+                  MinutesToRepeat = min.padLeft(2, '0');
+                  SecondsToRepeat = sec.padLeft(2, '0');
+                  break;
+                default:
+                  {}
+              }
+              int minEx = int.parse(MinutesExercise);
+              int secEx = int.parse(SecondsExercise);
+              int minRest = int.parse(MinutesRest);
+              int secRest = int.parse(SecondsRest);
+              int numEx = int.parse(NumberOfExercises);
+              int numRep = int.parse(NumberOfRepetitions);
+              int minRep = int.parse(MinutesToRepeat);
+              int secRep = int.parse(SecondsToRepeat);
+              int secTotal = ((minEx * 60 + secEx) * numEx +
+                      (minRest * 60 + secRest) * (numEx - 1)) *
+                  (numRep);
+              if (numRep > 1) secTotal += (minRep * 60 + secRep);
+              int minTotal = secTotal ~/ 60;
+              secTotal = secTotal % 60;
+              MinutesTotal = minTotal.toString().padLeft(2, '0');
+              SecondsTotal = secTotal.toString().padLeft(2, '0');
+              print(MinutesToRepeat);
+              print(SecondsToRepeat);
+            } else {
+              ScaffoldMessenger.of(context)
+                ..removeCurrentSnackBar()
+                ..showSnackBar(SnackBar(
+                    content:
+                        Text('Too few seconds! (Should be at least 5 secs)')));
+            }
+          }),
         );
       },
       child: Container(
@@ -376,128 +271,56 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Widget itemSetReps(IconData icon, Color color, Color iconColor, Color dialogThemeColor, String title,
-      String repetitions) {
+  Widget itemSetReps(IconData icon, Color color, Color iconColor,
+      Color dialogThemeColor, String title, String repetitions) {
     return InkWell(
       onTap: () {
-        showDialog(
+        showMaterialNumberPicker(
+          backgroundColor: color,
+          headerColor: dialogThemeColor,
+          buttonTextColor: iconColor,
+          title: '$title',
           context: context,
-          builder: (BuildContext context) {
-            TextEditingController _editingControllerReps =
-                new TextEditingController(text: repetitions);
-            return AlertDialog(
-              backgroundColor: dialogThemeColor,
-              actions: [
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      String rep = _editingControllerReps.text.toString();
-                      if (int.parse(rep) > 0) {
-                        setState(() {
-                          switch (title) {
-                            case 'Repetitions':
-                              NumberOfRepetitions = rep;
-                              break;
-                            case 'Exercises':
-                              NumberOfExercises = rep;
-                              break;
-                            default:
-                              {}
-                          }
-                          int minEx = int.parse(MinutesExercise);
-                          int secEx = int.parse(SecondsExercise);
-                          int minRest = int.parse(MinutesRest);
-                          int secRest = int.parse(SecondsRest);
-                          int numEx = int.parse(NumberOfExercises);
-                          int numRep = int.parse(NumberOfRepetitions);
-                          int minRep = int.parse(MinutesToRepeat);
-                          int secRep = int.parse(SecondsToRepeat);
-                          int secTotal = ((minEx * 60 + secEx) * numEx +
-                                  (minRest * 60 + secRest) * (numEx - 1)) *
-                              (numRep);
-                          if (numRep > 1) secTotal += (minRep * 60 + secRep);
-                          int minTotal = secTotal ~/ 60;
-                          secTotal = secTotal % 60;
-                          MinutesTotal = minTotal.toString();
-                          SecondsTotal = secTotal.toString();
-                          if (minTotal < 10) MinutesTotal = '0' + MinutesTotal;
-                          if (secTotal < 10) SecondsTotal = '0' + SecondsTotal;
-                        });
-                        Navigator.pop(context);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      elevation: 8.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'OK',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-              content: Container(
-                child: Column(
-                  children: [
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.only(top: 32),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(icon, color: Colors.white, size: 30.0),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                title,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 30,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          height: 60.0,
-                          width: 50.0,
-                          child: TextField(
-                            maxLength: 3,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              counterText: '',
-                            ),
-                            style: TextStyle(
-                              fontSize: 40.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            cursorColor: Colors.white,
-                            cursorHeight: 60.0,
-                            autofocus: true,
-                            controller: _editingControllerReps,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
+          minNumber: 0,
+          maxNumber: 30,
+          onChanged: (value) => setState(() {
+            String rep = value.toString();
+            if (int.parse(rep) > 0) {
+              switch (title) {
+                case 'Repetitions':
+                  NumberOfRepetitions = rep;
+                  break;
+                case 'Exercises':
+                  NumberOfExercises = rep;
+                  break;
+                default:
+                  {}
+              }
+              int minEx = int.parse(MinutesExercise);
+              int secEx = int.parse(SecondsExercise);
+              int minRest = int.parse(MinutesRest);
+              int secRest = int.parse(SecondsRest);
+              int numEx = int.parse(NumberOfExercises);
+              int numRep = int.parse(NumberOfRepetitions);
+              int minRep = int.parse(MinutesToRepeat);
+              int secRep = int.parse(SecondsToRepeat);
+              int secTotal = ((minEx * 60 + secEx) * numEx +
+                      (minRest * 60 + secRest) * (numEx - 1)) *
+                  (numRep);
+              if (numRep > 1) secTotal += (minRep * 60 + secRep);
+              int minTotal = secTotal ~/ 60;
+              secTotal = secTotal % 60;
+              MinutesTotal = minTotal.toString().padLeft(2, '0');
+              SecondsTotal = secTotal.toString().padLeft(2, '0');
+              print(MinutesToRepeat);
+              print(SecondsToRepeat);
+            } else {
+              ScaffoldMessenger.of(context)
+                ..removeCurrentSnackBar()
+                ..showSnackBar(SnackBar(
+                    content: Text('Too few $title! (Should be at least 1)')));
+            }
+          }),
         );
       },
       child: Container(
