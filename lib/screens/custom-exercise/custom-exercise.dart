@@ -81,7 +81,7 @@ class _CustomExerciseState extends State<CustomExercise> {
                 future: decodeExercises(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) print(snapshot.error);
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData && names.length < 1) {
                     for (int i = 0; i < snapshot.data!.length; i++) {
                       names.add(snapshot.data![i].name);
                       allPossibleExercise.add(snapshot.data![i]);

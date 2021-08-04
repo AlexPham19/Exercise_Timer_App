@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: WelcomePage(),
       title: "Timer App",
-      initialRoute: "/settings",
+      initialRoute: "/welcome",
       routes: <String, WidgetBuilder>{
         "/welcome": (BuildContext context) => new WelcomePage(),
         "/exercises": (BuildContext context) => new Exercises(),

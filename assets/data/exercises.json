@@ -92,121 +92,37 @@
   },
   {
     "id": 14,
-    "name": "Legs Lift",
-    "description": "1. Lie on your back. Place your hands, palms down, on the floor beside you.\n2. Raise your legs off the ground (Exhale as you go).Keep your knees locked throughout the exercise.\n3. Hold for 30 seconds, or as long as you can (with some routines, there is only a short contraction/holding period).\n4. Return to starting position (Inhale as you go).",
-    "image": "female_legs_lift",
+    "name": "Lunge Split Jump",
+    "description": "1. Stand with your feet together and your knees soft. Jump and come into a lunge with your left leg forward.\n2. Push off with both feet, jumping them together, then hopping into a lunge with your right leg in front.\n3. Jump your feet back together to complete one rep.",
+    "image": "lunge-split-jump.gif",
     "count": false
   },
   {
     "id": 15,
-    "name": "Lunge Split Jump",
-    "description": "1. Stand with your feet together and your knees soft. Jump and come into a lunge with your left leg forward.\n2. Push off with both feet, jumping them together, then hopping into a lunge with your right leg in front.\n3. Jump your feet back together to complete one rep.",
-    "image": "female_walking_jumps",
+    "name": "Jump Squat",
+    "description": "1. Stand with your feet shoulder-width apart.\n2. Start by doing a regular squat, then engage your core and jump up explosively.\n3. When you land, lower your body back into the squat position to complete one rep. Land as quietly as possible, which requires control",
+    "image": "jump-squat.gif",
     "count": false
   },
   {
     "id": 16,
-    "name": "Jump Squat",
-    "description": "1. Stand with your feet shoulder-width apart.\n2. Start by doing a regular squat, then engage your core and jump up explosively.\n3. When you land, lower your body back into the squat position to complete one rep. Land as quietly as possible, which requires control",
-    "image": "female_jump_squat",
+    "name": "Step Ups",
+    "description": "1. To start, place your entire right foot onto the bench or chair. Press through your right heel as you step onto the bench, bringing your left foot to meet your left so you are standing on the bench.\n2. Return to the starting position by stepping down with the right foot, then the left so both feet are on the floor.\n3. To make the exercise harder, you may do this exercise with the dumbbells",
+    "image": "step-ups.gif",
     "count": false
   },
   {
     "id": 17,
-    "name": "Step Ups",
-    "description": "1. To start, place your entire right foot onto the bench or chair. Press through your right heel as you step onto the bench, bringing your left foot to meet your left so you are standing on the bench.\n2. Return to the starting position by stepping down with the right foot, then the left so both feet are on the floor.\n3. Complete 15 steps leading with the left foot, then repeat another 15 steps leading with your left foot",
-    "image": "female_step_ups",
-    "count": false
+    "name": "Push Ups",
+    "description": "1. Get down on all fours, placing your hands slightly wider than your shoulders.\n2. Straighten your arms and legs.\n3. Lower your body until your chest nearly touches the floor.\n4. Pause, then push yourself back up.\n5. Repeat.",
+    "image": "push-ups.gif",
+    "count": true
   },
   {
     "id": 18,
-    "name": "Butt Lift",
-    "description": "Lie down on your back. Relax your arms and place your feet hip-width apart. Then raise your pelvis up to the ceiling and then touch your butt back down to the floor.",
-    "image": "female_butt_lift",
-    "count": false
-  },
-  {
-    "id": 19,
-    "name": "Booty Push",
-    "description": "1. Lie supine (on your back) with both knees bent.\n2. Lift your hips into the air as high as you can, simultaneously squeezing your glutes and keeping your scapulae on the floor.\n3. Once you are in the bridge position, extend one lower leg straight out and hold for 5 seconds.\n4. Lower the leg, then kick and hold with the opposite leg",
-    "image": "female_booty_push",
-    "count": false
-  },
-  {
-    "id": 20,
-    "name": "TipToe Squat",
-    "description": "1. Stand with your feet wider than shoulder-width and your toes out. Bend your knees into a squat and hold your arms out to the side.\n2. While staying in the squat, lift your heels off of the floor onto your tip toes. Freeze on your tip toes, then bring your heels back down and repeat.",
-    "image": "female_tiptoe_squats",
-    "count": false
-  },
-  {
-    "id": 21,
-    "name": "Walking Squats",
-    "description": "Start standing with your feet shoulder-width apart. Get into a squat position and stay low as you walk forward. After several steps, walk backwards to the starting position. Go on!",
-    "image": "female_jumping_squats",
-    "count": false
-  },
-  {
-    "id": 22,
-    "name": "Squat with Narrow Legs",
-    "description": "1. Stand with your feet touching. Hold your hands comfortably in front of your chest to help you stay balanced and bend your knees, lowering your hips deeply, bringing your thighs parallel with the floor if you can. Be sure to keep weight back in your heels.\n2. Then rise back up, straightening the legs completely, squeezing the glutes at the top of the movement to get the most out of the exercise.",
-    "image": "female_squat_narrow_legs",
-    "count": false
-  },
-  {
-    "id": 23,
-    "name": "Bridge with Leg Raise Left",
-    "description": "1. Tighten your abdominal and buttock muscles. Raise your hips up to create a straight line from your knees to shoulders.\n2. Squeeze your core and try to pull your belly button back toward your spine. Slowly raise and extend one leg while keeping your pelvis raised and level.\n3. Hold.\n4. Return to the starting position with knees bent.",
-    "image": "female_bridge_leg_raise_left",
-    "count": false
-  },
-  {
-    "id": 24,
-    "name": "Bridge with Leg Raise Right",
-    "description": "1. Tighten your abdominal and buttock muscles. Raise your hips up to create a straight line from your knees to shoulders.\n2. Squeeze your core and try to pull your belly button back toward your spine. Slowly raise and extend one leg while keeping your pelvis raised and level.\n3. Hold.\n4. Return to the starting position with knees bent.",
-    "image": "female_bridge_leg_raise_right",
-    "count": false
-  },
-  {
-    "id": 25,
-    "name": "Squat with Floor Touch",
-    "description": "1. To do a floor tap squat, start in an upright position. Hop, landing with your feet more than shoulder width apart, with the toes pointed outward at a 45-degree angle. As you land, bend at the knees and hips, reaching down to touch the floor with one hand in one fluid motion.\n2. Once your hand touches the ground, come back up with a hop, bringing your feet back together. Then repeat the motion, touching the floor with the alternate hand.\n3. When you reach down to touch the floor, keep your back as straight as possible. That means you need to really lower your hips and deepen the squat—not stooping down with your back. To improve your balance as you squat, reach your opposite hand backward.",
-    "image": "female_squat_floor_touch",
-    "count": false
-  },
-  {
-    "id": 26,
-    "name": "Straight Legs High Left",
-    "description": "1. Lie on your back with your hips square and your legs laid out comfortably on the floor.\n2. Bend the knee of your non-injured leg at a 90-degree angle, planting the foot flatly on the floor.\n3. Stabilize the muscles on your straight leg by contracting your quadriceps (the group of muscles on the front of your thigh).\n4. Inhaling slowly, lift the straight leg six inches off the ground. Hold for three seconds.\n5. Exhaling slowly, lower the leg to the floor with control",
-    "image": "female_straight_legs_high_right",
-    "count": false
-  },
-  {
-    "id": 27,
-    "name": "Frozen Squat",
-    "description": "1. Find a foot stance that feels best for you. Pointing your toes slightly outwards helps some, but keeping them parallel is fine, too. If you’re not sure what’s best, start by putting your feet shoulder-width apart and pointed about 15 degrees outwards.\n2. Tense your abs like someone is about to punch you.",
-    "image": "female_frozen_squat",
-    "count": false
-  },
-  {
-    "id": 28,
-    "name": "Gravity Feet",
-    "description": "Start lying facedown on an exercise mat with your arms straight out to the sides. Contract your right glute and hamstring to bring your foot back up and across your body towards your left side. Lightly touch your foot to the floor and return it to the starting position. Repeat, alternating sides.",
-    "image": "female_gravity_feet",
-    "count": false
-  },
-  {
-    "id": 29,
-    "name": "Look at Your Toes",
-    "description": "1. Contract your abdominal muscles and core slowly and lift your legs up to an extended position at a 45-degree angle with your torso.\n2. Reach your arms straight forward or reach up toward your shins as you are able. It's important to maintain good core posture and a strong spine throughout the movement and \n3. to avoid rounding the shoulders forward. Don't hold your breath—continue to breathe deeply during the movement.\n4. Hold this V-shaped position for several seconds to begin. As you get stronger, hold the position longer. Return to your starting position slowly while continuing to keep your abs engaged and tight.\n5. Just before you reach the floor, stop and hold the position for a few seconds. Repeat this entire movement several times.",
-    "image": "female_look_at_your_toes",
-    "count": false
-  },
-  {
-    "id": 30,
-    "name": "Squat Leg Up",
-    "description": "1. Stand with your feet shoulder-width apart, feet parallel. Hold your hands out in front of you for balance. Bend your knees, lowering your hips deeply so your thighs are parallel with the floor, keeping weight back in your heels.\n2. Then rise back up, straightening the legs completely and lifting the left leg out to the side, squeezing the outer glute.\n3. As you step the foot back into shoulder-width position, squat down again. Then stand up and do a side leg lift on the right side. Lower the leg back to the starting position. This counts as one rep.",
-    "image": "female_squat_leg_up",
+    "name": "Plank",
+    "description": "1. Begin in the plank position, face down with your forearms and toes on the floor. Your elbows are directly under your shoulders and your forearms are facing forward. Your head is relaxed and you should be looking at the floor.\n2. Engage your abdominal muscles, drawing your navel toward your spine. Keep your torso straight and rigid and your body in a straight line from your ears to your toes with no sagging or bending. This is the neutral spine position. Ensure your shoulders are down, not creeping up toward your ears. Your heels should be over the balls of your feet.",
+    "image": "plank.png",
     "count": false
   }
 ]

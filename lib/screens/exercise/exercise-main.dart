@@ -75,7 +75,6 @@ class _ExerciseMainState extends State<ExerciseMain>
     flutterTts.setSpeechRate(0.5);
     flutterTts.setVolume(1.0);
     flutterTts.setPitch(1.0);
-    //flutterTts.speak('Get ready');
     playSound(soundType, 'get ready', playerLong);
 
     playerShort2Sec.setAsset('assets/audio/beep-short.mp3');
@@ -85,6 +84,7 @@ class _ExerciseMainState extends State<ExerciseMain>
     playerShort2Sec.seek(Duration(seconds: 0));
     playerShort1Sec.seek(Duration(seconds: 0));
     playerShort0Sec.seek(Duration(seconds: 0));
+
     counterSeconds = 10;
     counterMinutes = 0;
     int minutesExercise = int.parse(MinutesExercise);
@@ -95,6 +95,7 @@ class _ExerciseMainState extends State<ExerciseMain>
     int secondsToRepeat = int.parse(SecondsToRepeat);
     int numberOfExercises = int.parse(NumberOfExercises);
     int numberOfRepetitions = int.parse(NumberOfRepetitions);
+
     controller = AnimationController(
         vsync: this,
         duration: Duration(seconds: counterSeconds + counterMinutes * 60));
@@ -193,7 +194,6 @@ class _ExerciseMainState extends State<ExerciseMain>
             decoration: BoxDecoration(
               gradient: ThemeGradients[index],
             ),
-            //color: TimerColors[index],
             child: Column(
               children: [
                 Container(
@@ -511,10 +511,8 @@ class _ExerciseMainState extends State<ExerciseMain>
         if (index < States.length - 1) index += 1;
         counterMinutes = Time[index] ~/ 60;
         counterSeconds = Time[index] % 60;
-        CounterMinutes = counterMinutes.toString();
-        CounterSeconds = counterSeconds.toString();
-        if (counterMinutes < 10) CounterMinutes = '0' + CounterMinutes;
-        if (counterSeconds < 10) CounterSeconds = '0' + CounterSeconds;
+        CounterMinutes = counterMinutes.toString().padLeft(2, '0');
+        CounterSeconds = counterSeconds.toString().padLeft(2, '0');
         currentState = States[index];
       });
     }
