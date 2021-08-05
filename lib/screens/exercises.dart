@@ -22,6 +22,10 @@ class _ExercisesState extends State<Exercises> {
       textToChangeSec = new TextEditingController(text: '30');
 
   @override
+  void initState() {
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,

@@ -46,38 +46,33 @@ class _StatisticsState extends State<Statistics> {
     totalDays30Days = 0;
     totalExercises30Days = 0;
     totalDurations30Days = 0;
-    if (hiveBox.length == 1) {
+
+    if (hiveBox.length == 1 &&
+        isTheSameDay(hiveBox.getAt(0).date, DateTime.now())) {
       setState(() {
         numberConsecutiveDate = 1;
       });
-    } else {
+    } else if (hiveBox.isNotEmpty) {
       for (int i = hiveBox.length - 1; i > 0; i--) {
         if (i == hiveBox.length - 1) {
-          if (hiveBox.getAt(i).date.day == DateTime.now().day) {
+          if (isTheSameDay(hiveBox.getAt(i).date, DateTime.now())) {
+            print('true');
             setState(() {
               numberConsecutiveDate = 1;
             });
-          } else
-            break;
-        }
-        if (daysBetween(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date)
-                .abs() <=
-            1) {
-          if (daysBetween(hiveBox.getAt(i).date.subtract(Duration(days: 1)),
-                  hiveBox.getAt(i - 1).date) ==
-              0) {
-            setState(() {
-              numberConsecutiveDate += 1;
-            });
           }
-        } else
-          break;
+        }
+        if (isBeforeXDays(
+            hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date, 1)) {
+          setState(() {
+            numberConsecutiveDate += 1;
+          });
+        }
       }
     }
 
     for (int i = 0; i < hiveBox.length; i++) {
-      if (daysBetween(hiveBox.getAt(i).date, DateTime.now()) == 0 &&
-          hiveBox.getAt(i).date.day == DateTime.now().day) {
+      if (isTheSameDay(hiveBox.getAt(i).date, DateTime.now())) {
         setState(() {
           totalDurations +=
               int.parse(hiveBox.getAt(i).durationSeconds.toString());
@@ -92,7 +87,10 @@ class _StatisticsState extends State<Statistics> {
           hiveBox.getAt(i).date.day !=
               DateTime.now().subtract(Duration(days: 30))) {
         setState(() {
-          totalDays30Days += 1;
+          if (i > 0) {
+            if (!isTheSameDay(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date))
+              totalDays30Days += 1;
+          } else if (i == 0) totalDays30Days += 1;
           totalDurations30Days +=
               int.parse(hiveBox.getAt(i).durationSeconds.toString());
           totalExercises30Days = totalExercises30Days +
@@ -106,7 +104,11 @@ class _StatisticsState extends State<Statistics> {
           hiveBox.getAt(i).date.day !=
               DateTime.now().subtract(Duration(days: 7))) {
         setState(() {
-          totalDays7Days += 1;
+          print(hiveBox.getAt(i).date.toString() + "!");
+          if (i > 0) {
+            if (!isTheSameDay(hiveBox.getAt(i).date, hiveBox.getAt(i - 1).date))
+              totalDays7Days += 1;
+          } else if (i == 0) totalDays7Days += 1;
           totalDurations7Days +=
               int.parse(hiveBox.getAt(i).durationSeconds.toString());
           totalExercises7Days = totalExercises7Days +
@@ -116,7 +118,8 @@ class _StatisticsState extends State<Statistics> {
       }
     }
 
-
+    print('Total Days for 7 Days = ' + totalDays7Days.toString());
+    print('Total Days for 30 Days = ' + totalDays30Days.toString());
     super.initState();
   }
 
@@ -192,7 +195,7 @@ class _StatisticsState extends State<Statistics> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 8.0),
-                          child: Text("Đến Ngày"),
+                          child: Text("Hôm nay"),
                         ),
                         InkWell(
                           onTap: () {
@@ -203,7 +206,7 @@ class _StatisticsState extends State<Statistics> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0, vertical: 8.0),
-                            child: Text("Tuần trước"),
+                            child: Text("7 ngày qua"),
                           ),
                         ),
                         InkWell(
@@ -215,7 +218,7 @@ class _StatisticsState extends State<Statistics> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0, vertical: 8.0),
-                            child: Text("Tháng trước"),
+                            child: Text("30 ngày qua"),
                           ),
                         ),
                       ],
@@ -244,7 +247,7 @@ class _StatisticsState extends State<Statistics> {
                     Container(
                       child: Center(
                         child: statisticsRow(
-                            1,
+                            totalDays7Days,
                             totalExercises7Days,
                             totalDurations7Days,
                             false), // dummy data. Mình chưa rõ cách tính
@@ -252,8 +255,11 @@ class _StatisticsState extends State<Statistics> {
                     ),
                     Container(
                       child: Center(
-                        child: statisticsRow(1, totalExercises30Days,
-                            totalDurations30Days, false), // Chưa rõ cách tính
+                        child: statisticsRow(
+                            totalDays30Days,
+                            totalExercises30Days,
+                            totalDurations30Days,
+                            false), // Chưa rõ cách tính
                       ),
                     )
                   ],
@@ -336,5 +342,15 @@ class _StatisticsState extends State<Statistics> {
     from = DateTime(from.year, from.month, from.day);
     to = DateTime(to.year, to.month, to.day);
     return (to.difference(from).inHours / 24).round();
+  }
+
+  bool isTheSameDay(DateTime from, DateTime to) {
+    return daysBetween(from, to) <= 1 && from.day == to.day;
+  }
+
+  bool isBeforeXDays(DateTime from, DateTime to, int difference) {
+    return (daysBetween(from, to) <= difference - 1) &&
+        (isTheSameDay(from, to.subtract(Duration(days: difference))) ||
+            isTheSameDay(to, from.subtract(Duration(days: difference))));
   }
 }
