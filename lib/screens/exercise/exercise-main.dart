@@ -167,6 +167,7 @@ class _ExerciseMainState extends State<ExerciseMain>
 
   @override
   void dispose() {
+    controller!.dispose();
     States.clear();
     Time.clear();
     playerShort2Sec.dispose();

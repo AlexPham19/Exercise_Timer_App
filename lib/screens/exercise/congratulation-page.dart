@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/constants/notifications-manager.dart';
 import 'package:my_first_flutter_app/model/remindTime.dart';
+import 'package:my_first_flutter_app/screens/welcome/welcome.dart';
 import '../history.dart';
 
 class CongratulationPage extends StatefulWidget {
@@ -183,7 +184,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                         child: InkWell(
                           onTap: () {
                             changeSetting();
-                            Navigator.pop(context);
+                            Navigator.popUntil(context, ModalRoute.withName(WelcomePage.id));
                             Navigator.pushNamed(context, History.id);
                           },
                           child: Center(
@@ -207,7 +208,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                         child: InkWell(
                           onTap: () {
                             changeSetting();
-                            Navigator.pop(context);
+                            Navigator.popUntil(context, ModalRoute.withName(WelcomePage.id));
                           },
                           child: Center(
                               child: Text(

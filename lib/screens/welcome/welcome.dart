@@ -21,6 +21,7 @@ String MinutesTotal = '00',
 
 class WelcomePage extends StatefulWidget {
   static const id = '/welcome';
+
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
@@ -291,45 +292,38 @@ class _WelcomePageState extends State<WelcomePage> {
           buttonTextColor: iconColor,
           title: '$title',
           context: context,
-          minNumber: 0,
+          minNumber: 1,
           maxNumber: 20,
           onChanged: (value) => setState(() {
             String rep = value.toString();
-            if (int.parse(rep) > 0) {
-              switch (title) {
-                case 'Repetitions':
-                  NumberOfRepetitions = rep;
-                  break;
-                case 'Exercises':
-                  NumberOfExercises = rep;
-                  break;
-                default:
-                  {}
-              }
-              int minEx = int.parse(MinutesExercise);
-              int secEx = int.parse(SecondsExercise);
-              int minRest = int.parse(MinutesRest);
-              int secRest = int.parse(SecondsRest);
-              int numEx = int.parse(NumberOfExercises);
-              int numRep = int.parse(NumberOfRepetitions);
-              int minRep = int.parse(MinutesToRepeat);
-              int secRep = int.parse(SecondsToRepeat);
-              int secTotal = ((minEx * 60 + secEx) * numEx +
-                      (minRest * 60 + secRest) * (numEx - 1)) *
-                  (numRep);
-              if (numRep > 1) secTotal += (minRep * 60 + secRep);
-              int minTotal = secTotal ~/ 60;
-              secTotal = secTotal % 60;
-              MinutesTotal = minTotal.toString().padLeft(2, '0');
-              SecondsTotal = secTotal.toString().padLeft(2, '0');
-              print(MinutesToRepeat);
-              print(SecondsToRepeat);
-            } else {
-              ScaffoldMessenger.of(context)
-                ..removeCurrentSnackBar()
-                ..showSnackBar(SnackBar(
-                    content: Text('Too few $title! (Should be at least 1)')));
+            switch (title) {
+              case 'Repetitions':
+                NumberOfRepetitions = rep;
+                break;
+              case 'Exercises':
+                NumberOfExercises = rep;
+                break;
+              default:
+                {}
             }
+            int minEx = int.parse(MinutesExercise);
+            int secEx = int.parse(SecondsExercise);
+            int minRest = int.parse(MinutesRest);
+            int secRest = int.parse(SecondsRest);
+            int numEx = int.parse(NumberOfExercises);
+            int numRep = int.parse(NumberOfRepetitions);
+            int minRep = int.parse(MinutesToRepeat);
+            int secRep = int.parse(SecondsToRepeat);
+            int secTotal = ((minEx * 60 + secEx) * numEx +
+                    (minRest * 60 + secRest) * (numEx - 1)) *
+                (numRep);
+            if (numRep > 1) secTotal += (minRep * 60 + secRep);
+            int minTotal = secTotal ~/ 60;
+            secTotal = secTotal % 60;
+            MinutesTotal = minTotal.toString().padLeft(2, '0');
+            SecondsTotal = secTotal.toString().padLeft(2, '0');
+            print(MinutesToRepeat);
+            print(SecondsToRepeat);
           }),
         );
       },
@@ -374,6 +368,7 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
     );
   }
+
   void showAskingDialog() {
     showDialog(
       context: context,
@@ -401,4 +396,3 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 }
-
