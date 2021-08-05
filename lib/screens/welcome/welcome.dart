@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_material_pickers/helpers/show_number_picker.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/widgets/drawer.dart';
@@ -17,6 +20,7 @@ String MinutesTotal = '00',
     SecondsToRepeat = '05';
 
 class WelcomePage extends StatefulWidget {
+  static const id = '/welcome';
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
@@ -42,119 +46,125 @@ class _WelcomePageState extends State<WelcomePage> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50.0),
         child: MainAppBar(
-          title: 'Stopwatch',
+          title: 'Timer',
           scaffoldKey: _scaffoldKey,
         ),
       ),
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: ListView(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                color: Themes.appBarTheme,
-              ),
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  MinutesTotal + ':' + SecondsTotal,
-                  style: TextStyle(
-                      fontSize: 70,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800),
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: RawMaterialButton(
-                fillColor: Colors.white,
-                shape: CircleBorder(),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/exercise-main');
-                },
-                child: Icon(
-                  Icons.play_arrow,
-                  size: 50.0,
+      body: WillPopScope(
+        onWillPop: () async {
+          showAskingDialog();
+          return false;
+        },
+        child: SafeArea(
+          child: ListView(
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
                   color: Themes.appBarTheme,
                 ),
-                padding: EdgeInsets.all(15.0),
-                elevation: 8.0,
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    MinutesTotal + ':' + SecondsTotal,
+                    style: TextStyle(
+                        fontSize: 70,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800),
+                  ),
+                ),
               ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: itemSetTime(
-                        Icons.play_circle_outline,
-                        Themes.exerciseThemeMain,
-                        Themes.exerciseIconMain,
-                        Themes.exerciseDialogTheme,
-                        'Exercise',
-                        MinutesExercise + ':' + SecondsExercise,
-                        MinutesExercise,
-                        SecondsExercise),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                child: RawMaterialButton(
+                  fillColor: Colors.white,
+                  shape: CircleBorder(),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/exercise-main');
+                  },
+                  child: Icon(
+                    Icons.play_arrow,
+                    size: 50.0,
+                    color: Themes.appBarTheme,
                   ),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: itemSetTime(
-                        Icons.pause_circle_outline,
-                        Themes.restThemeMain,
-                        Themes.restIconMain,
-                        Themes.restDialogTheme,
-                        'Rest',
-                        MinutesRest + ':' + SecondsRest,
-                        MinutesRest,
-                        SecondsRest),
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: itemSetReps(
-                      Icons.play_circle_outline,
-                      Themes.numberExerciseThemeMain,
-                      Themes.numberExerciseIconMain,
-                      Themes.numberExerciseDialogTheme,
-                      'Exercises',
-                      NumberOfExercises,
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: itemSetReps(
-                      Icons.play_circle_outline,
-                      Themes.numberRepetitionsThemeMain,
-                      Themes.numberRepetitionsIconMain,
-                      Themes.numberRepetitionsDialogTheme,
-                      'Repetitions',
-                      NumberOfRepetitions,
-                    ),
-                  ),
-                  InkWell(
-                    child: Container(
+                  padding: EdgeInsets.all(15.0),
+                  elevation: 8.0,
+                ),
+              ),
+              Container(
+                child: Column(
+                  children: [
+                    Container(
                       padding:
                           EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                       child: itemSetTime(
                           Icons.play_circle_outline,
-                          Themes.timeToChangeRepThemeMain,
-                          Themes.timeToChangeRepIconMain,
-                          Themes.timeToChangeRepDialogTheme,
-                          'Time to repeat',
-                          MinutesToRepeat + ':' + SecondsToRepeat,
-                          MinutesToRepeat,
-                          SecondsToRepeat),
+                          Themes.exerciseThemeMain,
+                          Themes.exerciseIconMain,
+                          Themes.exerciseDialogTheme,
+                          'Exercise',
+                          MinutesExercise + ':' + SecondsExercise,
+                          MinutesExercise,
+                          SecondsExercise),
                     ),
-                  ),
-                ],
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      child: itemSetTime(
+                          Icons.pause_circle_outline,
+                          Themes.restThemeMain,
+                          Themes.restIconMain,
+                          Themes.restDialogTheme,
+                          'Rest',
+                          MinutesRest + ':' + SecondsRest,
+                          MinutesRest,
+                          SecondsRest),
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      child: itemSetReps(
+                        Icons.play_circle_outline,
+                        Themes.numberExerciseThemeMain,
+                        Themes.numberExerciseIconMain,
+                        Themes.numberExerciseDialogTheme,
+                        'Exercises',
+                        NumberOfExercises,
+                      ),
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      child: itemSetReps(
+                        Icons.play_circle_outline,
+                        Themes.numberRepetitionsThemeMain,
+                        Themes.numberRepetitionsIconMain,
+                        Themes.numberRepetitionsDialogTheme,
+                        'Repetitions',
+                        NumberOfRepetitions,
+                      ),
+                    ),
+                    InkWell(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 16.0),
+                        child: itemSetTime(
+                            Icons.play_circle_outline,
+                            Themes.timeToChangeRepThemeMain,
+                            Themes.timeToChangeRepIconMain,
+                            Themes.timeToChangeRepDialogTheme,
+                            'Time to repeat',
+                            MinutesToRepeat + ':' + SecondsToRepeat,
+                            MinutesToRepeat,
+                            SecondsToRepeat),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -177,7 +187,7 @@ class _WelcomePageState extends State<WelcomePage> {
           title: 'Seconds $title',
           context: context,
           minNumber: 0,
-          maxNumber: 59 * 60 + 59,
+          maxNumber: 10 * 60,
           onChanged: (value) => setState(() {
             String min = (value ~/ 60).toString();
             String sec = (value % 60).toString();
@@ -282,7 +292,7 @@ class _WelcomePageState extends State<WelcomePage> {
           title: '$title',
           context: context,
           minNumber: 0,
-          maxNumber: 30,
+          maxNumber: 20,
           onChanged: (value) => setState(() {
             String rep = value.toString();
             if (int.parse(rep) > 0) {
@@ -364,4 +374,31 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
     );
   }
+  void showAskingDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Column(
+            children: [
+              Text('Bạn có chắc là thoát ứng dụng này?'),
+            ],
+          ),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  exit(0);
+                },
+                child: Text('Có')),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Đéo')),
+          ],
+        );
+      },
+    );
+  }
 }
+
