@@ -45,6 +45,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
     Duration duration = controller!.duration! * (controller!.value);
     return '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
+
   int exercises = 0, repetitions = 0;
 
   @override
@@ -168,7 +169,8 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
 
   @override
   void dispose() {
-    numberExercises = ''; numberRepetitions = '';
+    numberExercises = '';
+    numberRepetitions = '';
     listCustomExercise.clear();
     index = 0;
     controller!.dispose();
@@ -272,7 +274,12 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                 ),
                                 Visibility(
                                   visible: index % 2 == 1,
-                                  child: Image.asset('assets/gif/' + listCustomExercise[index ~/ 2].imgUrl, height: 200, width: 300,),
+                                  child: Image.asset(
+                                    'assets/gif/' +
+                                        listCustomExercise[index ~/ 2].imgUrl,
+                                    height: 200,
+                                    width: 300,
+                                  ),
                                 ),
                                 AnimatedBuilder(
                                     animation: controller!
@@ -446,13 +453,13 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                               });
                             }),
                       ),
-                      Visibility(
-                        visible: Hive.box('settings').get('soundType') == 0 ||
-                            Hive.box('settings').get('soundType') == 1,
-                        child: Container(
-                          width: 50,
-                          height: 50,
-                          margin: EdgeInsets.all(12),
+                      Container(
+                        width: 50,
+                        height: 50,
+                        margin: EdgeInsets.all(12),
+                        child: Visibility(
+                          visible: Hive.box('settings').get('soundType') == 0 ||
+                              Hive.box('settings').get('soundType') == 1,
                           child: FloatingActionButton(
                             heroTag: 'Turn on or off the volume',
                             backgroundColor: TimerColors[index],
@@ -510,8 +517,10 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                                       seconds: counterSeconds +
                                           counterMinutes * 60));
                               controller!.reverse(from: 1.0);
-                              playerLong.seek(Duration(seconds: 0));
-                              playSound(soundType, 'Start', playerLong);
+                              if (soundType == 0 || soundType == 1) {
+                                playerLong.seek(Duration(seconds: 0));
+                                playSound(soundType, 'Start', playerLong);
+                              }
                             });
                           },
                           child: Text(

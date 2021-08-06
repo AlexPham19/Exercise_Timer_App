@@ -156,6 +156,9 @@ class _SettingsState extends State<Settings> {
                                   .date;
                               isReminded = value;
                               if (hiveBoxTime.isEmpty) {
+                                // dòng này để test
+                                //addNotification(DateTime.now().hour, DateTime.now().minute);
+                                // test
                                 addNotification(dateTime.hour, dateTime.minute);
                               } else {
                                 replaceNotification(
