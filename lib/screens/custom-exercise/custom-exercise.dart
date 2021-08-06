@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/helpers/show_number_picker.dart';
 import 'package:flutter_material_pickers/helpers/show_radio_picker.dart';
+import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/model/exerciseData.dart';
 import 'package:my_first_flutter_app/model/exerciseDetails.dart';
 
@@ -12,6 +13,14 @@ class CustomExercise extends StatefulWidget {
 
   @override
   _CustomExerciseState createState() => _CustomExerciseState();
+}
+
+enum Type {
+  TextName,
+  TextExerciseMinutes,
+  TextExerciseSeconds,
+  TextRestMinutes,
+  TextRestSeconds
 }
 
 String numberExercises = '', numberRepetitions = '';
@@ -25,15 +34,11 @@ class _CustomExerciseState extends State<CustomExercise> {
   bool isDefaultButtonOn = false;
 
   int indexExercise = 1;
-  TextEditingController controllerName = new TextEditingController();
-  TextEditingController controllerExerciseMinutes =
-      new TextEditingController(text: '00');
-  TextEditingController controllerExerciseSeconds =
-      new TextEditingController(text: '05');
-  TextEditingController controllerRestMinutes =
-      new TextEditingController(text: '00');
-  TextEditingController controllerRestSeconds =
-      new TextEditingController(text: '05');
+  String controllerName = '';
+  String controllerExerciseMinutes = '00';
+  String controllerExerciseSeconds = '05';
+  String controllerRestMinutes = '00';
+  String controllerRestSeconds = '05';
   String exerciseDuration = '00:05';
   String restDuration = '00:05';
   ExerciseDetails? chosenExercise;
@@ -43,10 +48,10 @@ class _CustomExerciseState extends State<CustomExercise> {
   void initState() {
     isDefaultButtonOn = false;
     indexExercise = 1;
-    controllerExerciseMinutes = TextEditingController(text: '00');
-    controllerRestMinutes = TextEditingController(text: '00');
-    controllerExerciseSeconds = TextEditingController(text: '05');
-    controllerRestSeconds = TextEditingController(text: '05');
+    controllerExerciseMinutes = '00';
+    controllerRestMinutes = '00';
+    controllerExerciseSeconds = '05';
+    controllerRestSeconds = '05';
     super.initState();
   }
 
@@ -70,7 +75,7 @@ class _CustomExerciseState extends State<CustomExercise> {
           style: TextStyle(fontSize: 23),
         ),
         centerTitle: true,
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Themes.appBarTheme,
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -103,19 +108,20 @@ class _CustomExerciseState extends State<CustomExercise> {
                           selectedItem: chosenName,
                           onChanged: (value) => setState(() {
                             chosenName = value;
-                            controllerName.text = chosenName;
+                            controllerName = chosenName;
                           }),
                         );
                       },
-                      child: TextField(
-                        textAlign: TextAlign.center,
-                        enabled: false,
-                        controller: controllerName,
-                        decoration: InputDecoration(
-                          disabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.blue, width: 2.0),
-                          ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blue)),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        alignment: Alignment.center,
+                        child: Text(
+                          controllerName == '' ? 'choose...' : controllerName,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w500),
                         ),
                       ),
                     ),
@@ -123,143 +129,39 @@ class _CustomExerciseState extends State<CustomExercise> {
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Choose exercise duration for set $indexExercise: '),
-                  Flexible(
-                    child: Container(
-                      // width: 30,
-                      // height: 30,
-                      child: InkWell(
-                        onTap: () {
-                          showMaterialNumberPicker(
-                              title: 'Minutes',
-                              context: context,
-                              minNumber: 0,
-                              maxNumber: 59,
-                              onChanged: (value) => setState(() {
-                                    controllerExerciseMinutes.text =
-                                        value.toString().padLeft(2, '0');
-                                  }));
-                        },
-                        child: TextField(
-                          enabled: false,
-                          textAlign: TextAlign.center,
-                          controller: controllerExerciseMinutes,
-                          keyboardType: TextInputType.number,
-                          maxLength: 2,
-                          decoration: InputDecoration(
-                            disabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  Row(
+                    children: [
+                      inputField(
+                          Type.TextExerciseMinutes,
+                          controllerExerciseMinutes,
+                          'Minutes to Exercise',
+                          0,
+                          10),
+                      inputField(
+                          Type.TextExerciseSeconds,
+                          controllerExerciseSeconds,
+                          'Seconds to Exercise',
+                          0,
+                          59),
+                    ],
                   ),
-                  //Text(':'),
-                  Flexible(
-                    child: Container(
-                      // width: 30,
-                      // height: 30,
-                      child: InkWell(
-                        onTap: () {
-                          showMaterialNumberPicker(
-                              title: 'Seconds',
-                              context: context,
-                              minNumber: 0,
-                              maxNumber: 59,
-                              onChanged: (value) => setState(() {
-                                    controllerExerciseSeconds.text =
-                                        value.toString().padLeft(2, '0');
-                                  }));
-                        },
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          enabled: false,
-                          controller: controllerExerciseSeconds,
-                          keyboardType: TextInputType.number,
-                          maxLength: 2,
-                          decoration: InputDecoration(
-                            disabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Choose rest duration for set $indexExercise: '),
-                  Flexible(
-                    child: Container(
-                      // width: 30,
-                      // height: 30,
-                      child: InkWell(
-                        onTap: () {
-                          showMaterialNumberPicker(
-                              title: 'Minutes',
-                              context: context,
-                              minNumber: 0,
-                              maxNumber: 59,
-                              onChanged: (value) => setState(() {
-                                    controllerRestMinutes.text =
-                                        value.toString().padLeft(2, '0');
-                                  }));
-                        },
-                        child: TextField(
-                          enabled: false,
-                          textAlign: TextAlign.center,
-                          controller: controllerRestMinutes,
-                          keyboardType: TextInputType.number,
-                          maxLength: 2,
-                          decoration: InputDecoration(
-                            disabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  Row(
+                    children: [
+                      inputField(Type.TextRestMinutes, controllerRestMinutes,
+                          'Minutes to Rest', 0, 10),
+                      inputField(Type.TextRestSeconds, controllerRestSeconds,
+                          'Seconds to Rest', 0, 59),
+                    ],
                   ),
-                  //Text(':'),
-                  Flexible(
-                    child: Container(
-                      // width: 30,
-                      // height: 30,
-                      child: InkWell(
-                        onTap: () {
-                          showMaterialNumberPicker(
-                              title: 'Seconds',
-                              context: context,
-                              minNumber: 0,
-                              maxNumber: 59,
-                              onChanged: (value) => setState(() {
-                                    controllerRestSeconds.text =
-                                        value.toString().padLeft(2, '0');
-                                  }));
-                        },
-                        child: TextField(
-                          enabled: false,
-                          textAlign: TextAlign.center,
-                          controller: controllerRestSeconds,
-                          keyboardType: TextInputType.number,
-                          maxLength: 2,
-                          decoration: InputDecoration(
-                            disabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2.0),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
               ElevatedButton(
@@ -267,9 +169,9 @@ class _CustomExerciseState extends State<CustomExercise> {
                   if (acceptableFormat()) {
                     if (indexExercise <= int.parse(numberExercises)) {
                       setState(() {
-                        print(controllerName.text.toString());
-                        print(controllerExerciseMinutes.text.toString());
-                        print(controllerExerciseSeconds.text.toString());
+                        print(controllerName.toString());
+                        print(controllerExerciseMinutes.toString());
+                        print(controllerExerciseSeconds.toString());
                         addToList();
                       });
                     }
@@ -280,10 +182,18 @@ class _CustomExerciseState extends State<CustomExercise> {
                     }
                     if (indexExercise < int.parse(numberExercises))
                       indexExercise += 1;
-                    controllerName.clear();
+                    setState(() {
+                      controllerName = '';
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context)
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(SnackBar(
+                          content:
+                          Text('You have not choose your exercise, or your rest/exercise time is below 5 seconds!')));
                   }
                 },
-                child: Text('Ok'),
+                child: Text('OK'),
               ),
               Row(
                 children: [
@@ -314,8 +224,8 @@ class _CustomExerciseState extends State<CustomExercise> {
 
   void addToList() {
     String imgUrl = '';
-    for(int i = 0; i < allPossibleExercise.length; i++){
-      if(allPossibleExercise[i].name == controllerName.text.toString()){
+    for (int i = 0; i < allPossibleExercise.length; i++) {
+      if (allPossibleExercise[i].name == controllerName.toString()) {
         setState(() {
           imgUrl = allPossibleExercise[i].imgUrl;
         });
@@ -323,23 +233,57 @@ class _CustomExerciseState extends State<CustomExercise> {
       }
     }
     listCustomExercise.add(new ExerciseData(
-      controllerName.text.toString(),
-      int.parse(controllerExerciseMinutes.text.toString()) * 60 +
-          int.parse(controllerExerciseSeconds.text.toString()),
-      int.parse(controllerRestMinutes.text.toString()) * 60 +
-          int.parse(controllerRestSeconds.text.toString()),
+      controllerName.toString(),
+      int.parse(controllerExerciseMinutes.toString()) * 60 +
+          int.parse(controllerExerciseSeconds.toString()),
+      int.parse(controllerRestMinutes.toString()) * 60 +
+          int.parse(controllerRestSeconds.toString()),
       imgUrl,
     ));
   }
 
   bool acceptableFormat() {
-    String name = controllerName.text.toString();
-    String activeMin = controllerExerciseMinutes.text.toString();
-    String activeSec = controllerExerciseSeconds.text.toString();
-    String passiveMin = controllerRestMinutes.text.toString();
-    String passiveSec = controllerRestSeconds.text.toString();
+    String name = controllerName.toString();
+    String activeMin = controllerExerciseMinutes.toString();
+    String activeSec = controllerExerciseSeconds.toString();
+    String passiveMin = controllerRestMinutes.toString();
+    String passiveSec = controllerRestSeconds.toString();
     return name != '' &&
+        name != 'choose...' &&
         int.parse(activeMin) * 60 + int.parse(activeSec) >= 5 &&
         int.parse(passiveSec) + int.parse(passiveMin) * 60 >= 5;
+  }
+
+  Widget inputField(Type type, String input, String titlePicker, int minNumber,
+      int maxNumber) {
+    return InkWell(
+      onTap: () {
+        showMaterialNumberPicker(
+          title: titlePicker,
+          context: context,
+          minNumber: minNumber,
+          maxNumber: maxNumber,
+          onChanged: (value) => setState(() {
+            if (type == Type.TextExerciseMinutes)
+              controllerExerciseMinutes = value.toString();
+            if (type == Type.TextExerciseSeconds)
+              controllerExerciseSeconds = value.toString();
+            if (type == Type.TextRestMinutes)
+              controllerRestMinutes = value.toString();
+            if (type == Type.TextRestSeconds)
+              controllerRestSeconds = value.toString();
+          }),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        alignment: Alignment.center,
+        child: Text(
+          input.padLeft(2, '0'),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
   }
 }

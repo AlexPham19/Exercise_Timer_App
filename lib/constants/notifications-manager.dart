@@ -9,7 +9,8 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
 const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails('channelId', 'channelName', 'channelDescription',
+    AndroidNotificationDetails('111', 'channelName', 'channelDescription',
+        sound: RawResourceAndroidNotificationSound('exercise_notifications'),
         importance: Importance.max, priority: Priority.max, playSound: true);
 const IOSNotificationDetails iOSPlatformChannelSpecifics =
     IOSNotificationDetails(
@@ -96,7 +97,7 @@ class NotificationsManager {
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        2,
+        1,
         'Thông báo luyện tập hàng ngày',
         'Đã đến lúc bạn tập luyện!',
         // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
@@ -113,7 +114,8 @@ class NotificationsManager {
     var platformChannel = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.periodicallyShow(123, 'Đã đến giờ rồi',
+    // để test thì chỉnh sang everyMinute
+    await flutterLocalNotificationsPlugin.periodicallyShow(DateTime.now().minute, 'Đã đến giờ rồi',
         'Tiếp tục nhấc mông lên đi!', RepeatInterval.daily, platformChannel,
         payload: 'New Payload');
   }

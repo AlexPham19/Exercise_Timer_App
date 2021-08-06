@@ -13,18 +13,21 @@ class Exercises extends StatefulWidget {
   _ExercisesState createState() => _ExercisesState();
 }
 
+enum Type { TextRepetitions, TextExercises, TextToChangeMin, TextToChangeSec }
+
 class _ExercisesState extends State<Exercises> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  TextEditingController textRepetitions = new TextEditingController(text: '1'),
-      textExercises = new TextEditingController(text: '5');
-  TextEditingController textToChangeMin = new TextEditingController(text: '00'),
-      textToChangeSec = new TextEditingController(text: '30');
+  String textRepetitions = '1',
+      textExercises = '5',
+      textToChangeMin = '00',
+      textToChangeSec = '30';
 
   @override
   void initState() {
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,171 +46,70 @@ class _ExercisesState extends State<Exercises> {
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Container(
-                      padding: EdgeInsets.only(right: 8),
-                      child:
-                          Text('Choose number of exercises per repetition:')),
-                  Flexible(
-                      //width: 30,
-                      child: InkWell(
-                    onTap: () {
-                      showMaterialNumberPicker(
-                        title: 'Numbers of exercises',
-                        context: context,
-                        minNumber: 1,
-                        maxNumber: 50,
-                        onChanged: (value) => setState(() {
-                          textExercises.text = value.toString();
-                        }),
-                      );
-                    },
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      controller: textExercises,
-                      enabled: false,
-                      style: TextStyle(
-                        fontSize: 20,
-                      ),
-                      keyboardType: TextInputType.number,
-                      maxLength: 2,
-                      decoration: InputDecoration(
-                        disabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.blue, width: 2.0),
-                        ),
-                      ),
-                    ),
-                  ))
-                ],
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        child:
+                            Text('Choose number of exercises per repetition:')),
+                    inputField(Type.TextExercises, textExercises,
+                        'Number of exercises', 1, 30),
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  Text('Choose number of repetitions:'),
-                  Flexible(
-                      //width: 30,
-                      child: InkWell(
-                        onTap: () {
-                          showMaterialNumberPicker(
-                              title: 'Numbers of repetitions',
-                              context: context,
-                              minNumber: 1,
-                              maxNumber: 50,
-                              onChanged: (value) => setState(() {
-                                    textRepetitions.text = value.toString();
-                                  }));
-                        },
-                        child: TextField(
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                          textAlign: TextAlign.center,
-                          controller: textRepetitions,
-                          enabled: false,
-                          keyboardType: TextInputType.number,
-                          maxLength: 2,
-                          decoration: InputDecoration(
-                            disabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.blue, width: 2.0),
-                            ),
-                          ),
-                        ),
-                      ))
-                ],
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Choose number of repetitions:'),
+                    inputField(Type.TextRepetitions, textRepetitions,
+                        'Number of repetitions', 1, 30),
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  Text('Choose time to change between each repetition: '),
-                  Flexible(
-                    child: Row(
-                      children: [
-                        Flexible(
-                            //width: 30,
-                            child: InkWell(
-                              onTap: () {
-                                showMaterialNumberPicker(
-                                    title: 'Minutes',
-                                    context: context,
-                                    minNumber: 0,
-                                    maxNumber: 59,
-                                    onChanged: (value) => setState(() {
-                                          textToChangeMin.text =
-                                              value.toString().padLeft(2, '0');
-                                        }));
-                              },
-                              child: TextField(
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                        child: Text(
+                            'Choose time to change between each repetition: ')),
+                    Container(
+                      child: Row(
+                        children: [
+                          inputField(Type.TextToChangeMin, textToChangeMin,
+                              'Minutes', 0, 10),
+                          Container(
+                              padding: EdgeInsets.only(left: 4, right: 4),
+                              child: Text(
+                                ':',
                                 style: TextStyle(
-                                  fontSize: 20,
-                                ),
-                                textAlign: TextAlign.center,
-                                controller: textToChangeMin,
-                                enabled: false,
-                                keyboardType: TextInputType.number,
-                                maxLength: 2,
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 2),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blue, width: 2.0),
-                                  ),
-                                ),
-                              ),
-                            )),
-                        Container(
-                            padding: EdgeInsets.only(left: 4, right: 4),
-                            child: Text(':')),
-                        Flexible(
-                          //width: 30,
-                          child: InkWell(
-                            onTap: () {
-                              showMaterialNumberPicker(
-                                  title: 'Seconds',
-                                  context: context,
-                                  minNumber: 0,
-                                  maxNumber: 59,
-                                  onChanged: (value) => setState(() {
-                                        textToChangeSec.text =
-                                            value.toString().padLeft(2, '0');
-                                      }));
-                            },
-                            child: TextField(
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                              textAlign: TextAlign.center,
-                              controller: textToChangeSec,
-                              enabled: false,
-                              keyboardType: TextInputType.number,
-                              maxLength: 2,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 2),
-                                disabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.blue, width: 2.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                                    fontSize: 20, fontWeight: FontWeight.w500),
+                              )),
+                          inputField(Type.TextToChangeSec, textToChangeSec,
+                              'Seconds', 0, 59),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Container(
                 child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      numberRepetitions = textRepetitions.text.toString();
-                      numberExercises = textExercises.text.toString();
+                      numberRepetitions = textRepetitions.toString();
+                      numberExercises = textExercises.toString();
                       timeToChangeRep =
-                          int.parse(textToChangeMin.text.toString()) * 60 +
-                              int.parse(textToChangeSec.text.toString());
+                          int.parse(textToChangeMin.toString()) * 60 +
+                              int.parse(textToChangeSec.toString());
                     });
                     if (acceptableFormat()) {
-                      Navigator.pushReplacementNamed(
+                      Navigator.pushNamed(
                           context, CustomExercise.id);
                     } else {
                       ScaffoldMessenger.of(context)
@@ -227,12 +129,46 @@ class _ExercisesState extends State<Exercises> {
   }
 
   bool acceptableFormat() {
-    String textMin = textToChangeMin.text.toString();
-    String textSec = textToChangeSec.text.toString();
-    String textRep = textRepetitions.text.toString();
-    String textExercise = textExercises.text.toString();
+    String textMin = textToChangeMin.toString();
+    String textSec = textToChangeSec.toString();
+    String textRep = textRepetitions.toString();
+    String textExercise = textExercises.toString();
     return int.parse(textRep) > 0 &&
         int.parse(textExercise) > 0 &&
         int.parse(textMin) * 60 + int.parse(textSec) >= 5;
+  }
+
+  Widget inputField(Type type, String input, String titlePicker, int minNumber,
+      int maxNumber) {
+    return InkWell(
+      onTap: () {
+        showMaterialNumberPicker(
+          title: titlePicker,
+          context: context,
+          minNumber: minNumber,
+          maxNumber: maxNumber,
+          onChanged: (value) => setState(() {
+            if (type == Type.TextToChangeMin)
+              textToChangeMin = value.toString();
+            if (type == Type.TextToChangeSec)
+              textToChangeSec = value.toString();
+            if (type == Type.TextRepetitions)
+              textRepetitions = value.toString();
+            if (type == Type.TextExercises) textExercises = value.toString();
+          }),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        alignment: Alignment.center,
+        child: Text(
+          type == Type.TextRepetitions || type == Type.TextExercises
+              ? input
+              : input.padLeft(2, '0'),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+        ),
+      ),
+    );
   }
 }

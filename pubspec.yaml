@@ -11,8 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^0.22.0
-  cupertino_icons: ^1.0.2
   flutter_material_pickers: ^3.1.0
   path_provider: ^2.0.2
   http: ^0.13.3

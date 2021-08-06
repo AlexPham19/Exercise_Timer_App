@@ -1,5 +1,6 @@
-import 'dart:ui';
 import 'dart:math';
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -167,6 +168,7 @@ class _ExerciseMainState extends State<ExerciseMain>
 
   @override
   void dispose() {
+    controller!.dispose();
     States.clear();
     Time.clear();
     playerShort2Sec.dispose();
@@ -375,7 +377,11 @@ class _ExerciseMainState extends State<ExerciseMain>
                         width: 50,
                         height: 50,
                         margin: EdgeInsets.all(12),
-                        child: Visibility(visible: false, child: FloatingActionButton(onPressed: () {},)),
+                        child: Visibility(
+                            visible: false,
+                            child: FloatingActionButton(
+                              onPressed: () {},
+                            )),
                       ),
                       Container(
                         width: 150,
@@ -415,32 +421,32 @@ class _ExerciseMainState extends State<ExerciseMain>
                               });
                             }),
                       ),
-                      Visibility(
-                        visible: Hive.box('settings').get('soundType') == 0 ||
-                            Hive.box('settings').get('soundType') == 1,
-                        child: Container(
-                            width: 50,
-                            height: 50,
-                            margin: EdgeInsets.all(12.0),
-                            child: FloatingActionButton(
-                              heroTag: 'Turn on or off the volume',
-                              backgroundColor: TimerColors[index],
-                              onPressed: () {
-                                setState(() {
-                                  if (soundType != 2) {
-                                    soundType = 2;
-                                  } else {
-                                    soundType =
-                                        Hive.box('settings').get('soundType');
-                                  }
-                                });
-                              },
-                              child: soundType != 2
-                                  ? Icon(Icons.volume_up)
-                                  : Icon(Icons.volume_off),
-                            ),
+                      Container(
+                        width: 50,
+                        height: 50,
+                        margin: EdgeInsets.all(12.0),
+                        child: Visibility(
+                          visible: Hive.box('settings').get('soundType') == 0 ||
+                              Hive.box('settings').get('soundType') == 1,
+                          child: FloatingActionButton(
+                            heroTag: 'Turn on or off the volume',
+                            backgroundColor: TimerColors[index],
+                            onPressed: () {
+                              setState(() {
+                                if (soundType != 2) {
+                                  soundType = 2;
+                                } else {
+                                  soundType =
+                                      Hive.box('settings').get('soundType');
+                                }
+                              });
+                            },
+                            child: soundType != 2
+                                ? Icon(Icons.volume_up)
+                                : Icon(Icons.volume_off),
                           ),
                         ),
+                      ),
                     ],
                   ),
                 ),
@@ -478,8 +484,10 @@ class _ExerciseMainState extends State<ExerciseMain>
                                       seconds: counterSeconds +
                                           counterMinutes * 60));
                               controller!.reverse(from: 1.0);
-                              playerLong.seek(Duration(seconds: 0));
-                              playSound(soundType, 'Start', playerLong);
+                              if (soundType == 0 || soundType == 1) {
+                                playerLong.seek(Duration(seconds: 0));
+                                playSound(soundType, 'Start', playerLong);
+                              }
                             });
                           },
                           child: Text(

@@ -60,6 +60,11 @@ class _StatisticsState extends State<Statistics> {
             setState(() {
               numberConsecutiveDate = 1;
             });
+          } else {
+            setState(() {
+              numberConsecutiveDate = 0;
+            });
+            break;
           }
         }
         if (isBeforeXDays(
