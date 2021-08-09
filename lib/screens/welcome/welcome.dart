@@ -289,7 +289,6 @@ class _WelcomePageState extends State<WelcomePage> {
         showMaterialNumberPicker(
           backgroundColor: color,
           headerColor: dialogThemeColor,
-          buttonTextColor: iconColor,
           title: '$title',
           context: context,
           minNumber: 1,

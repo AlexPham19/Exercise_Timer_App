@@ -34,7 +34,7 @@ class _CustomExerciseState extends State<CustomExercise> {
   bool isDefaultButtonOn = false;
 
   int indexExercise = 1;
-  String controllerName = '';
+  String controllerName = 'choose...';
   String controllerExerciseMinutes = '00';
   String controllerExerciseSeconds = '05';
   String controllerRestMinutes = '00';
@@ -52,6 +52,7 @@ class _CustomExerciseState extends State<CustomExercise> {
     controllerRestMinutes = '00';
     controllerExerciseSeconds = '05';
     controllerRestSeconds = '05';
+    controllerName = 'Donkey Kick';
     super.initState();
   }
 
@@ -80,141 +81,247 @@ class _CustomExerciseState extends State<CustomExercise> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              FutureBuilder<List<ExerciseDetails>>(
-                future: decodeExercises(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) print(snapshot.error);
-                  if (snapshot.hasData && names.length < 1) {
-                    for (int i = 0; i < snapshot.data!.length; i++) {
-                      names.add(snapshot.data![i].name);
-                      allPossibleExercise.add(snapshot.data![i]);
-                    }
-                  }
-                  return Container();
-                },
-              ),
-              Row(
+              Column(
                 children: [
-                  Text('Choose exercise for set $indexExercise: '),
-                  Flexible(
-                    child: InkWell(
-                      onTap: () {
-                        showMaterialRadioPicker<String>(
-                          context: context,
-                          title: 'Pick Your Exercise',
-                          items: names,
-                          selectedItem: chosenName,
-                          onChanged: (value) => setState(() {
-                            chosenName = value;
-                            controllerName = chosenName;
-                          }),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blue)),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                        alignment: Alignment.center,
-                        child: Text(
-                          controllerName == '' ? 'choose...' : controllerName,
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w500),
+                  FutureBuilder<List<ExerciseDetails>>(
+                    future: decodeExercises(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) print(snapshot.error);
+                      if (snapshot.hasData && names.length < 1) {
+                        for (int i = 0; i < snapshot.data!.length; i++) {
+                          names.add(snapshot.data![i].name);
+                          allPossibleExercise.add(snapshot.data![i]);
+                        }
+                          controllerName = allPossibleExercise[0].name;
+                      }
+                      return Container();
+                    },
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Choose exercise for set $indexExercise: '),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border:
+                                Border.all(color: Themes.customExerciseBorder),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              showMaterialRadioPicker<String>(
+                                context: context,
+                                title: 'Pick Your Exercise',
+                                items: names,
+                                selectedItem: chosenName,
+                                onChanged: (value) => setState(() {
+                                  chosenName = value;
+                                  controllerName = chosenName;
+                                }),
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 8),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    controllerName,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w400,
+                                        color: Themes.appBarTheme),
+                                  ),
+                                ),
+                                Container(
+                                  alignment: FractionalOffset.centerRight,
+                                  child: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    size: 20,
+                                    color: Themes.appBarTheme,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            'Choose exercise duration for set $indexExercise: '),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border:
+                                Border.all(color: Themes.customExerciseBorder),
+                          ),
+                          child: Row(
+                            children: [
+                              inputField(
+                                  Type.TextExerciseMinutes,
+                                  controllerExerciseMinutes,
+                                  'Minutes to Exercise',
+                                  0,
+                                  10),
+                              Text(
+                                ':',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              inputField(
+                                  Type.TextExerciseSeconds,
+                                  controllerExerciseSeconds,
+                                  'Seconds to Exercise',
+                                  0,
+                                  59),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Choose rest duration for set $indexExercise: '),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border:
+                                Border.all(color: Themes.customExerciseBorder),
+                          ),
+                          child: Row(
+                            children: [
+                              inputField(
+                                  Type.TextRestMinutes,
+                                  controllerRestMinutes,
+                                  'Minutes to Rest',
+                                  0,
+                                  10),
+                              Text(
+                                ':',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                              inputField(
+                                  Type.TextRestSeconds,
+                                  controllerRestSeconds,
+                                  'Seconds to Rest',
+                                  0,
+                                  59),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            'Do it for all of the remaining exercises',
+                            style: TextStyle(),
+                          ),
+                        CupertinoSwitch(
+                          activeColor: Themes.appBarTheme,
+                          value: isDefaultButtonOn,
+                          onChanged: (value) {
+                            if (acceptableFormat()) {
+                              if (value == true) {
+                                setState(() {
+                                  isDefaultButtonOn = value;
+                                  setState(() {
+                                    for (int i = indexExercise;
+                                        i <= int.parse(numberExercises) - 1;
+                                        i++) {
+                                      addToList();
+                                    }
+                                    indexExercise = int.parse(numberExercises);
+                                    isDefaultButtonOn = true;
+                                  });
+                                });
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                ..removeCurrentSnackBar()
+                                ..showSnackBar(SnackBar(
+                                    content: Text(
+                                        'You have not choose your exercise, or your rest/exercise time is below 5 seconds!')));
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Choose exercise duration for set $indexExercise: '),
-                  Row(
-                    children: [
-                      inputField(
-                          Type.TextExerciseMinutes,
-                          controllerExerciseMinutes,
-                          'Minutes to Exercise',
-                          0,
-                          10),
-                      inputField(
-                          Type.TextExerciseSeconds,
-                          controllerExerciseSeconds,
-                          'Seconds to Exercise',
-                          0,
-                          59),
-                    ],
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Choose rest duration for set $indexExercise: '),
-                  Row(
-                    children: [
-                      inputField(Type.TextRestMinutes, controllerRestMinutes,
-                          'Minutes to Rest', 0, 10),
-                      inputField(Type.TextRestSeconds, controllerRestSeconds,
-                          'Seconds to Rest', 0, 59),
-                    ],
-                  ),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (acceptableFormat()) {
-                    if (indexExercise <= int.parse(numberExercises)) {
-                      setState(() {
-                        print(controllerName.toString());
-                        print(controllerExerciseMinutes.toString());
-                        print(controllerExerciseSeconds.toString());
-                        addToList();
-                      });
-                    }
-                    if (indexExercise >= int.parse(numberExercises) ||
-                        isDefaultButtonOn == true) {
-                      Navigator.pushReplacementNamed(
-                          context, '/custom-exercise-action');
-                    }
-                    if (indexExercise < int.parse(numberExercises))
-                      indexExercise += 1;
-                    setState(() {
-                      controllerName = '';
-                    });
-                  } else {
-                    ScaffoldMessenger.of(context)
-                      ..removeCurrentSnackBar()
-                      ..showSnackBar(SnackBar(
-                          content:
-                          Text('You have not choose your exercise, or your rest/exercise time is below 5 seconds!')));
-                  }
-                },
-                child: Text('OK'),
-              ),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      if (acceptableFormat()) {
+              Container(
+                alignment: FractionalOffset.bottomCenter,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(20),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 100, vertical: 16),
+                      primary: acceptableFormat()
+                          ? Themes.appBarTheme
+                          : Themes.customExerciseInactiveButton),
+                  onPressed: () {
+                    if (acceptableFormat()) {
+                      if (indexExercise <= int.parse(numberExercises)) {
                         setState(() {
-                          for (int i = indexExercise;
-                              i <= int.parse(numberExercises) - 1;
-                              i++) {
-                            addToList();
-                          }
-                          indexExercise = int.parse(numberExercises);
-                          isDefaultButtonOn = true;
+                          print(controllerName.toString());
+                          print(controllerExerciseMinutes.toString());
+                          print(controllerExerciseSeconds.toString());
+                          addToList();
                         });
                       }
-                    },
-                    child: Text('Do it for all of the remaining exercises'),
+                      if (indexExercise >= int.parse(numberExercises) ||
+                          isDefaultButtonOn == true) {
+                        Navigator.pushReplacementNamed(
+                            context, '/custom-exercise-action');
+                      }
+                      if (indexExercise < int.parse(numberExercises))
+                        indexExercise += 1;
+                      setState(() {
+                        controllerName = '';
+                      });
+                    } else {
+                      ScaffoldMessenger.of(context)
+                        ..removeCurrentSnackBar()
+                        ..showSnackBar(SnackBar(
+                            content: Text(
+                                'You have not choose your exercise, or your rest/exercise time is below 5 seconds!')));
+                    }
+                  },
+                  child: Text(
+                    'OK',
+                    style: TextStyle(fontSize: 20),
                   ),
-                ],
-              )
+                ),
+              ),
             ],
           ),
         ),
@@ -249,7 +356,7 @@ class _CustomExerciseState extends State<CustomExercise> {
     String passiveMin = controllerRestMinutes.toString();
     String passiveSec = controllerRestSeconds.toString();
     return name != '' &&
-        name != 'choose...' &&
+        name != 'Choose...' &&
         int.parse(activeMin) * 60 + int.parse(activeSec) >= 5 &&
         int.parse(passiveSec) + int.parse(passiveMin) * 60 >= 5;
   }
@@ -276,12 +383,14 @@ class _CustomExerciseState extends State<CustomExercise> {
         );
       },
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         alignment: Alignment.center,
         child: Text(
           input.padLeft(2, '0'),
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Themes.appBarTheme),
         ),
       ),
     );

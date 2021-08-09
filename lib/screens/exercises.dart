@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
+import 'package:my_first_flutter_app/constants/Theme.dart';
 import 'package:my_first_flutter_app/widgets/drawer.dart';
 import 'package:my_first_flutter_app/widgets/main-app-bar-with-drawer.dart';
 
@@ -43,63 +44,95 @@ class _ExercisesState extends State<Exercises> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                        child:
-                            Text('Choose number of exercises per repetition:')),
-                    inputField(Type.TextExercises, textExercises,
-                        'Number of exercises', 1, 30),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Choose number of repetitions:'),
-                    inputField(Type.TextRepetitions, textRepetitions,
-                        'Number of repetitions', 1, 30),
-                  ],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                        child: Text(
-                            'Choose time to change between each repetition: ')),
-                    Container(
-                      child: Row(
-                        children: [
-                          inputField(Type.TextToChangeMin, textToChangeMin,
-                              'Minutes', 0, 10),
-                          Container(
-                              padding: EdgeInsets.only(left: 4, right: 4),
-                              child: Text(
+              Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                            child: Text(
+                                'Choose number of exercises per repetition:')),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border:
+                                Border.all(color: Themes.customExerciseBorder),
+                          ),
+                          child: inputField(Type.TextExercises, textExercises,
+                              'Number of exercises', 1, 30),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Choose number of repetitions:'),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border:
+                                Border.all(color: Themes.customExerciseBorder),
+                          ),
+                          child: inputField(Type.TextRepetitions,
+                              textRepetitions, 'Number of repetitions', 1, 30),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                            child: Text(
+                                'Choose time to change between each repetition: ')),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border:
+                                Border.all(color: Themes.customExerciseBorder),
+                          ),
+                          child: Row(
+                            children: [
+                              inputField(Type.TextToChangeMin, textToChangeMin,
+                                  'Minutes', 0, 10),
+                              Text(
                                 ':',
                                 style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.w500),
-                              )),
-                          inputField(Type.TextToChangeSec, textToChangeSec,
-                              'Seconds', 0, 59),
-                        ],
-                      ),
+                                    fontSize: 20, fontWeight: FontWeight.w700),
+                              ),
+                              inputField(Type.TextToChangeSec, textToChangeSec,
+                                  'Seconds', 0, 59),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Container(
+                alignment: FractionalOffset.bottomCenter,
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: new RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(20),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 100, vertical: 16),
+                      primary: acceptableFormat()
+                          ? Themes.appBarTheme
+                          : Themes.customExerciseInactiveButton),
                   onPressed: () {
                     setState(() {
                       numberRepetitions = textRepetitions.toString();
@@ -109,16 +142,18 @@ class _ExercisesState extends State<Exercises> {
                               int.parse(textToChangeSec.toString());
                     });
                     if (acceptableFormat()) {
-                      Navigator.pushNamed(
-                          context, CustomExercise.id);
+                      Navigator.pushNamed(context, CustomExercise.id);
                     } else {
                       ScaffoldMessenger.of(context)
                         ..removeCurrentSnackBar()
                         ..showSnackBar(SnackBar(
-                            content: Text('One of the inputs is too low!')));
+                            content: Text('Number of exercise/repetitions should not be 0, or time to change between each repetition should be greater than 5 seconds!')));
                     }
                   },
-                  child: Text('OK'),
+                  child: Text(
+                    'OK',
+                    style: TextStyle(fontSize: 20),
+                  ),
                 ),
               )
             ],
@@ -159,14 +194,16 @@ class _ExercisesState extends State<Exercises> {
         );
       },
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.blue)),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         alignment: Alignment.center,
         child: Text(
           type == Type.TextRepetitions || type == Type.TextExercises
               ? input
               : input.padLeft(2, '0'),
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+              color: Themes.appBarTheme),
         ),
       ),
     );

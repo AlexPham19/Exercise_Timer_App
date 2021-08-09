@@ -1,4 +1,5 @@
 import 'dart:ui' show Color;
+
 import 'package:flutter/material.dart';
 
 class Themes {
@@ -49,7 +50,13 @@ class Themes {
 
   static const Color wordExercise = Color(0xFFF2F2F2);
 
-  //
+  // ------------- THEME FOR CUSTOM EXERCISE -------------- //
+
+  static const Color customExerciseBorder = Color.fromRGBO(144, 145, 146, 1.0);
+  static const Color customExerciseInactiveButton =
+      Color.fromRGBO(210, 208, 208, 1.0);
+
+  // --------------OTHER-------------------//
   static TextStyle textOptions =
       TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 }

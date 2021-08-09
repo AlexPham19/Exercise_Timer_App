@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/constants/Theme.dart';
-import 'package:my_first_flutter_app/screens/exercises.dart';
 import 'package:my_first_flutter_app/screens/welcome/welcome.dart';
 
 class DrawerTile extends StatelessWidget {
@@ -34,11 +33,11 @@ class DrawerTile extends StatelessWidget {
             Navigator.of(context).pushReplacementNamed(route);
           else
             Navigator.pushNamed(context, route);
-          if(route == Exercises.id)
-            ScaffoldMessenger.of(context)
-              ..removeCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text('This feature is currently under development!')));
+          // if(route == Exercises.id)
+          //   ScaffoldMessenger.of(context)
+          //     ..removeCurrentSnackBar()
+          //     ..showSnackBar(SnackBar(
+          //         content: Text('This feature is currently under development!')));
         }
       },
       child: Container(

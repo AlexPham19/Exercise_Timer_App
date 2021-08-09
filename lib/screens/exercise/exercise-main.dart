@@ -474,21 +474,23 @@ class _ExerciseMainState extends State<ExerciseMain>
                         )
                       : InkWell(
                           onTap: () {
-                            setState(() {
-                              first = true;
-                              action();
-                              print(States[index]);
-                              controller = AnimationController(
-                                  vsync: this,
-                                  duration: Duration(
-                                      seconds: counterSeconds +
-                                          counterMinutes * 60));
-                              controller!.reverse(from: 1.0);
-                              if (soundType == 0 || soundType == 1) {
-                                playerLong.seek(Duration(seconds: 0));
-                                playSound(soundType, 'Start', playerLong);
-                              }
-                            });
+                            setState(
+                              () {
+                                first = true;
+                                action();
+                                print(States[index]);
+                                controller = AnimationController(
+                                    vsync: this,
+                                    duration: Duration(
+                                        seconds: counterSeconds +
+                                            counterMinutes * 60));
+                                controller!.reverse(from: 1.0);
+                                if (soundType == 0 || soundType == 1) {
+                                  playerLong.seek(Duration(seconds: 0));
+                                  playSound(soundType, 'Start', playerLong);
+                                }
+                              },
+                            );
                           },
                           child: Text(
                             'Bắt đầu luôn',
@@ -550,7 +552,7 @@ class _ExerciseMainState extends State<ExerciseMain>
                     Navigator.pop(context);
                     controller!.reverse();
                   },
-                  child: Text('Đéo')),
+                  child: Text('Không')),
             ],
           );
         });
