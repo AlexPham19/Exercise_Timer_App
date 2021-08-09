@@ -583,7 +583,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                   Navigator.pop(context);
                   controller!.reverse();
                 },
-                child: Text('Đéo')),
+                child: Text('Không')),
           ],
         );
       },
