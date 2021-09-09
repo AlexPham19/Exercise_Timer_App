@@ -1,6 +1,6 @@
 # Exercise Timer App
 
-The Exercise App, built in Flutter and entirely in my own. 
+The Exercise App, built in Flutter and entirely on my own. 
 App functions:
 - Set the time and number of exercise
 - Create exercise of your own
