@@ -177,6 +177,8 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
     States.clear();
     Time.clear();
     TimerColors.clear();
+    ThemeGradients.clear();
+    BorderColors.clear();
     playerShort2Sec.dispose();
     playerShort1Sec.dispose();
     playerShort0Sec.dispose();
