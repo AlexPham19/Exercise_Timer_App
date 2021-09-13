@@ -56,6 +56,8 @@ class _ExerciseMainState extends State<ExerciseMain>
 
   @override
   void initState() {
+    super.initState();
+
     WidgetsBinding.instance!
         .addObserver(LifecycleEventHandler(inactiveCallBack: () async {
       setState(() {
@@ -88,14 +90,14 @@ class _ExerciseMainState extends State<ExerciseMain>
 
     counterSeconds = 10;
     counterMinutes = 0;
-    int minutesExercise = int.parse(MinutesExercise);
-    int secondsExercise = int.parse(SecondsExercise);
-    int minutesRest = int.parse(MinutesRest);
-    int secondsRest = int.parse(SecondsRest);
-    int minutesToRepeat = int.parse(MinutesToRepeat);
-    int secondsToRepeat = int.parse(SecondsToRepeat);
-    int numberOfExercises = int.parse(NumberOfExercises);
-    int numberOfRepetitions = int.parse(NumberOfRepetitions);
+    minutesExercise = int.parse(MinutesExercise);
+    secondsExercise = int.parse(SecondsExercise);
+    minutesRest = int.parse(MinutesRest);
+    secondsRest = int.parse(SecondsRest);
+    minutesToRepeat = int.parse(MinutesToRepeat);
+    secondsToRepeat = int.parse(SecondsToRepeat);
+    numberOfExercises = int.parse(NumberOfExercises);
+    numberOfRepetitions = int.parse(NumberOfRepetitions);
 
     controller = AnimationController(
         vsync: this,
@@ -143,7 +145,7 @@ class _ExerciseMainState extends State<ExerciseMain>
           );
           Time.add(minutesToRepeat * 60 + secondsToRepeat);
         } else if (j == numberOfExercises && numberOfRepetitions == 1) {
-        } else {
+        } else if (j != numberOfExercises){
           TimerColors.add(Colors.redAccent);
           BorderColors.add(Themes.restTimerBorder);
           ThemeGradients.add(
@@ -162,8 +164,7 @@ class _ExerciseMainState extends State<ExerciseMain>
     }
     if (numberOfRepetitions > 1) States.removeAt(States.length - 1);
     controller!.forward(from: 1.0);
-    for (int i = 0; i < States.length; i++) print(States[i]);
-    super.initState();
+    for (int i = 0; i < States.length; i++) print(States[i] + " with " + TimerColors[i].toString());
   }
 
   @override
@@ -175,6 +176,17 @@ class _ExerciseMainState extends State<ExerciseMain>
     playerShort1Sec.dispose();
     playerShort0Sec.dispose();
     playerLong.dispose();
+    minutesExercise = 0;
+    secondsExercise = 0;
+    minutesRest = 0;
+    secondsRest = 0;
+    minutesToRepeat = 0;
+    secondsToRepeat = 0;
+    numberOfExercises = 0;
+    numberOfRepetitions = 0;
+    TimerColors.clear();
+    ThemeGradients.clear();
+    BorderColors.clear();
     super.dispose();
   }
 
