@@ -6,6 +6,8 @@ App functions:
 - Create exercise of your own
 - Enable notifications based on the last time you exercise  
 - Instructions and illustrations included with each exercise
+
+# Download the App (Android): https://i.diawi.com/CZoN91
   
 # Featured Images:  
 ![alt text](https://user-images.githubusercontent.com/53650880/132599625-70b2617d-cab1-4b77-a498-587741394923.png)
