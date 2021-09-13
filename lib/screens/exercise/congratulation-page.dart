@@ -73,7 +73,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                         padding: EdgeInsets.only(top: 8, bottom: 16),
                         child: Center(
                             child: Text(
-                          'Xin chúc mừng!',
+                          'Congratulations!',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -93,7 +93,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 32, bottom: 16),
-                        child: Text('Luyện tập Hoàn tất!',
+                        child: Text('You have finished your exercise!',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -111,13 +111,13 @@ class _CongratulationPageState extends State<CongratulationPage> {
                       componentInfo(
                           Themes.exerciseThemeMain,
                           Themes.exerciseIconMain,
-                          'Số ngày liên tục',
+                          'Number of Consecutive Days',
                           numberConsecutiveDate.toString(),
                           Icons.done),
                       componentInfo(
                           Themes.restThemeMain,
                           Themes.restIconMain,
-                          'Tổng bài tập đã hoàn tất',
+                          'Exercises completed',
                           (hiveBox.getAt(hiveBox.length - 1).numberExercise *
                                   hiveBox
                                       .getAt(hiveBox.length - 1)
@@ -127,7 +127,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                       componentInfo(
                           Themes.numberRepetitionsThemeMain,
                           Themes.numberRepetitionsIconMain,
-                          'Tổng thời gian luyện tập',
+                          'Time spent exercising',
                           lastExerciseMin.toString().padLeft(2, '0') +
                               ":" +
                               lastExerciseSec.toString().padLeft(2, '0'),
@@ -141,7 +141,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                     children: [
                       Flexible(
                         child: Text(
-                          'Nhắc tôi luyện tập cùng thời gian này vào ngày mai',
+                          'Notify me to exercise tomorrow, at the same time',
                           style: TextStyle(
                               fontWeight: FontWeight.w600, fontSize: 18),
                         ),
@@ -154,12 +154,12 @@ class _CongratulationPageState extends State<CongratulationPage> {
                               notificationEnabled = value;
                               if(value == true){
                                 DateTime dateTime = hiveBox.getAt(hiveBox.length - 1).date;
-                                showMessage('Thông báo đang được đặt hàng ngày, lúc ' +
+                                showMessage('Notifications are set to happen daily, at ' +
                                     dateTime.hour.toString() +
                                     ":" +
                                     dateTime.minute.toString());
                               } else {
-                                showMessage('Thông báo sẽ được giữ nguyên như cũ');
+                                showMessage('Notification settings are not changed');
                               }
                             });
                           },
@@ -189,7 +189,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                           },
                           child: Center(
                               child: Text(
-                            'Hiện Lịch sử',
+                            'View History',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Themes.appBarTheme,
@@ -212,7 +212,7 @@ class _CongratulationPageState extends State<CongratulationPage> {
                           },
                           child: Center(
                               child: Text(
-                            'Xong',
+                            'Finished!',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           )),
