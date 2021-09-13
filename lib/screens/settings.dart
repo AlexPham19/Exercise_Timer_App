@@ -90,7 +90,7 @@ class _SettingsState extends State<Settings> {
                           onPressed: (int index) {
                             setState(() {
                               if (index == 0) {
-                                showMessage('Tính năng đang được phát triển!');
+                                showMessage('This feature is currently under development!');
                               } else {
                                 soundType = index;
                                 hiveBox.put('soundType', soundType);
@@ -107,7 +107,7 @@ class _SettingsState extends State<Settings> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 16.0, vertical: 8.0),
-                              child: Text("Voices (EN)"),
+                              child: Text("Voices"),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -134,13 +134,13 @@ class _SettingsState extends State<Settings> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Nhắc nhở luyện tập hàng ngày',
+                              Text('Remind me to exercise daily',
                                   style: Themes.textOptions),
                               Container(
                                 padding: EdgeInsets.symmetric(vertical: 8.0),
                                 width: 300,
                                 child: Text(
-                                  'Cùng thời gian trong ngày như lần luyện tập trước của bạn ' +
+                                  'Same time as the last time you exercise' +
                                       timeReminded,
                                   style: TextStyle(
                                       fontSize: 16, fontWeight: FontWeight.w300),
@@ -169,7 +169,7 @@ class _SettingsState extends State<Settings> {
                                         dateTime.hour, dateTime.minute);
                                   }
                                   showMessage(
-                                      'Thông báo đang được đặt hàng ngày, lúc ' +
+                                      'Notifications are set daily, at ' +
                                           dateTime.hour.toString() +
                                           ":" +
                                           dateTime.minute.toString());
@@ -177,11 +177,11 @@ class _SettingsState extends State<Settings> {
                                       ":" +
                                       dateTime.minute.toString() + ')';
                                 } else if (value == true && hiveBoxData.isEmpty) {
-                                  showMessage('Chưa có dữ liệu!');
+                                  showMessage('There is no exercises! Exercise once and you can enable notifications!');
                                   timeReminded = '';
                                 } else {
                                   isReminded = value;
-                                  showMessage('Đã tắt thông báo!');
+                                  showMessage('Notifications turned off');
                                   timeReminded = '';
                                   deleteNotification();
                                 }
@@ -200,7 +200,7 @@ class _SettingsState extends State<Settings> {
                         Container(
                           padding: EdgeInsets.symmetric(vertical: 8.0),
                           width: 300,
-                          child: Text('Tạm dừng luyện tập khi tôi rời ứng dụng',
+                          child: Text('Pause the timer when I leave the app',
                               style: Themes.textOptions),
                         ),
                         Container(
@@ -213,10 +213,10 @@ class _SettingsState extends State<Settings> {
                                 hiveBox.put('isPaused', value);
                                 if (value == true) {
                                   showMessage(
-                                      'Ứng dụng sẽ tạm dừng ngay khi bạn dừng ứng dụng');
+                                      'This application will stop when you exit');
                                 } else {
                                   showMessage(
-                                      'Ứng dụng tự động dừng khi kết thúc hiệp (nghỉ hoặc tập)');
+                                      'This application will automatically when finishing the exercise/rest duration');
                                 }
                               });
                             },
@@ -226,32 +226,32 @@ class _SettingsState extends State<Settings> {
                       ],
                     ),
                   ),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 8.0),
-                          width: 300,
-                          child: Text(
-                              'Phát âm thanh luyện tập to hơn nhạc nền của tôi',
-                              style: Themes.textOptions),
-                        ),
-                        Container(
-                          child: CupertinoSwitch(
-                            value: isSoundOn,
-                            onChanged: (value) {
-                              setState(() {
-                                showMessage('Tính năng đang được phát triển!');
-                                //isSoundOn = value;
-                              });
-                            },
-                            activeColor: Colors.pinkAccent,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                  // Container(
+                  //   child: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       Container(
+                  //         padding: EdgeInsets.symmetric(vertical: 8.0),
+                  //         width: 300,
+                  //         child: Text(
+                  //             'Enable sound louder than your music app',
+                  //             style: Themes.textOptions),
+                  //       ),
+                  //       Container(
+                  //         child: CupertinoSwitch(
+                  //           value: isSoundOn,
+                  //           onChanged: (value) {
+                  //             setState(() {
+                  //               showMessage('This is currently under development!');
+                  //               //isSoundOn = value;
+                  //             });
+                  //           },
+                  //           activeColor: Colors.pinkAccent,
+                  //         ),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
 
                   //  ----------------------------- CÒN NHỮNG THỨ DƯỚI THÌ CHƯA CẦN THIẾT ----------------------- //
                   // InkWell(

@@ -167,7 +167,7 @@ class _StatisticsState extends State<Statistics> {
                 padding: EdgeInsets.only(left: 16, top: 16, bottom: 16),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Chọn Thời gian',
+                  'Choose duration of time',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
               ),
@@ -200,7 +200,7 @@ class _StatisticsState extends State<Statistics> {
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 8.0),
-                          child: Text("Hôm nay"),
+                          child: Text("Today"),
                         ),
                         InkWell(
                           onTap: () {
@@ -211,7 +211,7 @@ class _StatisticsState extends State<Statistics> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0, vertical: 8.0),
-                            child: Text("7 ngày qua"),
+                            child: Text("Last 7 Days"),
                           ),
                         ),
                         InkWell(
@@ -223,7 +223,7 @@ class _StatisticsState extends State<Statistics> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16.0, vertical: 8.0),
-                            child: Text("30 ngày qua"),
+                            child: Text("Last 30 Days"),
                           ),
                         ),
                       ],
@@ -287,19 +287,19 @@ class _StatisticsState extends State<Statistics> {
               Themes.exerciseIconMain,
               Themes.exerciseThemeMain,
               Icons.done,
-              isOptionDaySelected ? 'Số ngày tập liên tiếp' : 'Số ngày đã tập',
+              isOptionDaySelected ? 'Number of Consecutive Days' : 'Number of Days',
               consecutiveDays.toString()),
           infoColumn(
               Themes.restIconMain,
               Themes.restThemeMain,
               Icons.directions_run,
-              'Các bài tập đã hoàn tất',
+              'Exercises completed',
               numberOfExercises.toString()),
           infoColumn(
               Themes.numberRepetitionsIconMain,
               Themes.numberRepetitionsThemeMain,
               Icons.timer,
-              'Thời gian bài tập',
+              'Exercise Total Duration',
               (durationSeconds ~/ 60).toString().padLeft(2, '0') +
                   ":" +
                   (durationSeconds % 60).toString().padLeft(2, '0')),
