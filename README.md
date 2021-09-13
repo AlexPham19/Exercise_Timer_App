@@ -6,7 +6,7 @@ App functions:
 - Create exercise of your own
 - Enable notifications based on the last time you exercise  
 - Instructions and illustrations included with each exercise
-
+- Could theoretically support Android and IOS. (However, I cannot generate the .ipa file in Windows PC).
 # Download the App in Diawi (Android): https://i.diawi.com/Q7PZm7
   
 # Featured Images:  
