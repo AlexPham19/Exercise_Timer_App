@@ -375,7 +375,7 @@ class _WelcomePageState extends State<WelcomePage> {
         return AlertDialog(
           title: Column(
             children: [
-              Text('Bạn có chắc là thoát ứng dụng này?'),
+              Text('Do you want to exit?'),
             ],
           ),
           actions: [
@@ -383,12 +383,12 @@ class _WelcomePageState extends State<WelcomePage> {
                 onPressed: () {
                   exit(0);
                 },
-                child: Text('Có')),
+                child: Text('Yes')),
             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('Đéo')),
+                child: Text('No')),
           ],
         );
       },

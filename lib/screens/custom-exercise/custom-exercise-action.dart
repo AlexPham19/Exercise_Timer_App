@@ -501,7 +501,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                             });
                           },
                           child: Text(
-                            'Thêm 15 giây nghỉ',
+                            'Add 15 seconds to rest',
                             style: TextStyle(color: Colors.white),
                           ),
                         )
@@ -524,7 +524,7 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                             });
                           },
                           child: Text(
-                            'Bắt đầu luôn',
+                            'Start Now',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -567,8 +567,8 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
         return AlertDialog(
           title: Column(
             children: [
-              Text('Bạn có chắc là thoát bài tập này?'),
-              Text('Nếu bạn thoát, hệ thống sẽ không lưu bài tập này!'),
+              Text('Do you want to stop this exercise'),
+              Text('If you do, this exercise will be discarded and not be saved'),
             ],
           ),
           actions: [
@@ -577,13 +577,13 @@ class _CustomExerciseActionState extends State<CustomExerciseAction>
                   Navigator.pop(context);
                   Navigator.popAndPushNamed(context, Exercises.id);
                 },
-                child: Text('Có')),
+                child: Text('Yes')),
             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                   controller!.reverse();
                 },
-                child: Text('Không')),
+                child: Text('No')),
           ],
         );
       },

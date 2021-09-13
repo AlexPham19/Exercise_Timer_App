@@ -100,10 +100,10 @@ class _HistoryState extends State<History> {
                           children: <Widget>[
                             ListTile(
                               title: Text(
-                                data.date.day.toString() +
-                                    " tháng " +
-                                    data.date.month.toString() +
-                                    ' ' +
+                                data.date.month.toString() +
+                                    "/" +
+                                    data.date.day.toString() +
+                                    '/' +
                                     data.date.year.toString() +
                                     ' ' +
                                     data.date.hour.toString() +
@@ -222,10 +222,10 @@ class _HistoryState extends State<History> {
                                 Container(
                                   padding: EdgeInsets.only(left: 10),
                                   child: Text(
-                                    data.date.day.toString() +
-                                        " thg " +
-                                        data.date.month.toString() +
-                                        ' ' +
+                                    data.date.month.toString() +
+                                        "/" +
+                                        data.date.day.toString() +
+                                        '/' +
                                         data.date.year.toString(),
                                     style: TextStyle(
                                         color: Colors.black,
@@ -286,16 +286,16 @@ class _HistoryState extends State<History> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             data.exerciseTime != -1
-                                ? textComponent('Tập luyện',
+                                ? textComponent('Exercise',
                                     data.exerciseTime.toString(), true)
                                 : Text('(Custom Exercise)'),
                             data.restTime != -1
                                 ? textComponent(
-                                    'Nghỉ ngơi', data.restTime.toString(), true)
+                                    'Rest', data.restTime.toString(), true)
                                 : Container(),
-                            textComponent('Bài tập',
+                            textComponent('Number of Exercises',
                                 data.numberExercise.toString(), false),
-                            textComponent('Vòng tập',
+                            textComponent('Reps',
                                 data.numberRepetitions.toString(), false),
                           ],
                         ),
