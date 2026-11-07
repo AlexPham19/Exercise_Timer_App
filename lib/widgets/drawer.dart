@@ -88,37 +88,37 @@ class MaterialDrawer extends StatelessWidget {
                       //     icon: Icons.attach_money,
                       //     route: '/promotions',
                       //     currentRoute: currentRoute),
-                      // Align(
-                      //   alignment: FractionalOffset.bottomCenter,
-                      //   child: Container(
-                      //     margin: EdgeInsets.only(top: 8),
-                      //     padding: EdgeInsets.only(bottom: 32, left: 16, right: 16),
-                      //     child: ElevatedButton(
-                      //         onPressed: () {
-                      //           Navigator.pushNamed(context, '/try-premium');
-                      //         },
-                      //         style: ElevatedButton.styleFrom(
-                      //           primary: Themes.appBarTheme,
-                      //           elevation: 4.0,
-                      //           padding: EdgeInsets.all(8.0),
-                      //           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                      //         ),
-                      //         child: Row(
-                      //           mainAxisAlignment: MainAxisAlignment.center,
-                      //           children: [
-                      //             Icon(
-                      //               Icons.monetization_on_outlined,
-                      //               size: 28.0,
-                      //             ),
-                      //             Container(
-                      //               padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-                      //               child: Text('Try Premium',
-                      //                   style: TextStyle(fontSize: 24.0)),
-                      //             ),
-                      //           ],
-                      //         )),
-                      //   ),
-                      // )
+                      Align(
+                        alignment: FractionalOffset.bottomCenter,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 8),
+                          padding: EdgeInsets.only(bottom: 32, left: 16, right: 16),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/try-premium');
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Themes.appBarTheme,
+                                elevation: 4.0,
+                                padding: EdgeInsets.all(8.0),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.monetization_on_outlined,
+                                    size: 28.0,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                                    child: Text('Try Premium',
+                                        style: TextStyle(fontSize: 24.0)),
+                                  ),
+                                ],
+                              )),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -130,3 +130,4 @@ class MaterialDrawer extends StatelessWidget {
     );
   }
 }
+
