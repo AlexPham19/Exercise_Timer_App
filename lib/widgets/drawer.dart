@@ -83,11 +83,11 @@ class MaterialDrawer extends StatelessWidget {
                           icon: Icons.bar_chart,
                           route: '/statistics',
                           currentRoute: currentRoute),
-                      // DrawerTile(
-                      //     title: 'Promotions',
-                      //     icon: Icons.attach_money,
-                      //     route: '/promotions',
-                      //     currentRoute: currentRoute),
+                      DrawerTile(
+                          title: 'Promotions',
+                          icon: Icons.attach_money,
+                          route: '/promotions',
+                          currentRoute: currentRoute),
                       Align(
                         alignment: FractionalOffset.bottomCenter,
                         child: Container(
@@ -130,4 +130,5 @@ class MaterialDrawer extends StatelessWidget {
     );
   }
 }
+
 
