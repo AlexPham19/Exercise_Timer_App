@@ -2,7 +2,7 @@
 
 ## Try the web app
 
-[Open Exercise Timer on ChatGPT Sites](https://alex-exercise-timer.coppercarp65.chatgpt.site). The Site is currently private and accessible to its owner. Daily mobile reminders are not available in the web version.
+[Updated] [Open Exercise Timer on ChatGPT Sites](https://alex-exercise-timer.coppercarp65.chatgpt.site). Daily mobile reminders are not available in the web version.
 
 The Exercise App, built in Flutter and entirely on my own. 
 App functions:
