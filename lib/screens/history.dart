@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -55,7 +56,7 @@ class _HistoryState extends State<History> {
               ),
               child: InkWell(
                 onTap: () {
-                  if (Platform.isIOS)
+                  if (!kIsWeb && Platform.isIOS)
                     showCupertinoModalPopup(
                       context: context,
                       builder: (BuildContext context) => CupertinoActionSheet(
@@ -334,3 +335,4 @@ class _HistoryState extends State<History> {
     );
   }
 }
+

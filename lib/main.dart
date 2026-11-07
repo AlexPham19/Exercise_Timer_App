@@ -43,6 +43,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 430),
+          child: child,
+        ),
+      ),
       home: WelcomePage(),
       title: "Timer App",
       initialRoute: WelcomePage.id,
@@ -64,3 +70,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

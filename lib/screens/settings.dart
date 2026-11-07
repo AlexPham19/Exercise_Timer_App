@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -153,6 +154,10 @@ class _SettingsState extends State<Settings> {
                           child: CupertinoSwitch(
                             value: isReminded,
                             onChanged: (value) async {
+                              if (kIsWeb && value) {
+                                showMessage('Daily reminders are not available in the web version.');
+                                return;
+                              }
                               setState(() {
                                 if (value == true && hiveBoxData.isNotEmpty) {
                                   DateTime dateTime = hiveBoxData
@@ -346,3 +351,4 @@ void deleteNotification() {
   Hive.box('timeReminded').deleteAt(0);
   cancelAllNotification();
 }
+

@@ -4,6 +4,15 @@
 
 [Updated] [Open Exercise Timer on ChatGPT Sites](https://alex-exercise-timer.coppercarp65.chatgpt.site). Daily mobile reminders are not available in the web version.
 
+## Run locally on the web
+
+This project was built with Flutter 2.10.5 (Dart 2.16). From the project directory, run:
+
+```sh
+flutter pub get
+flutter run -d chrome
+```
+
 The Exercise App, built in Flutter and entirely on my own. 
 App functions:
 - Set the time and number of exercise
@@ -21,3 +30,4 @@ App functions:
 ![alt text](https://user-images.githubusercontent.com/53650880/132599630-3dc0153f-e67a-469e-bdb1-3a560ce27622.png)
 ![alt text](https://user-images.githubusercontent.com/53650880/132599631-d6d8e9ed-1d13-453d-b54a-a417ba75590f.png)  
 ![alt text](https://user-images.githubusercontent.com/53650880/133103886-52bd2772-f81e-4cb2-a858-68c760dbd7bf.png)
+

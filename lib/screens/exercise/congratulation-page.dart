@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -150,6 +151,10 @@ class _CongratulationPageState extends State<CongratulationPage> {
                         child: CupertinoSwitch(
                           value: notificationEnabled,
                           onChanged: (value) {
+                            if (kIsWeb && value) {
+                              showMessage('Daily reminders are not available in the web version.');
+                              return;
+                            }
                             setState(() {
                               notificationEnabled = value;
                               if(value == true){
@@ -304,3 +309,4 @@ class _CongratulationPageState extends State<CongratulationPage> {
     notificationManager.showNotificationOneTime(hour, minute);
   }
 }
+

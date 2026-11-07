@@ -330,8 +330,7 @@ class _ExerciseMainState extends State<ExerciseMain>
                                                           NumberOfRepetitions),
                                                   timeStart,
                                                   false,
-                                                  int.parse(MinutesExercise *
-                                                          60) +
+                                                  int.parse(MinutesExercise) * 60 +
                                                       int.parse(
                                                           SecondsExercise),
                                                   int.parse(MinutesRest) * 60 +
@@ -366,7 +365,7 @@ class _ExerciseMainState extends State<ExerciseMain>
                                     builder:
                                         (BuildContext context, Widget? child) {
                                       return new Text(
-                                        first == true ? timerString : '10:00',
+                                        first == true ? timerString : '00:10',
                                         style: TextStyle(
                                             fontSize: 60, color: Colors.white),
                                       );
@@ -601,3 +600,4 @@ class TimerPainter extends CustomPainter {
         backgroundColor != old.backgroundColor;
   }
 }
+
